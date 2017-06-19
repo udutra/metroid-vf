@@ -9,6 +9,69 @@ namespace MetroidVF
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        enum GameState { Null, MainMenu, Playing };
+        GameState currGameState = GameState.MainMenu;
+
+        void EnterGameState(GameState newState)
+        {
+            LeaveGameState();
+
+            currGameState = newState;
+
+            switch (currGameState)
+            {
+                case GameState.MainMenu:
+                    { }
+                    break;
+
+                case GameState.Playing:
+                    { }
+                    break;
+            }
+        }
+
+        void LeaveGameState()
+        {
+            switch (currGameState)
+            {
+                case GameState.MainMenu:
+                    { }
+                    break;
+
+                case GameState.Playing:
+                    { }
+                    break;               
+            }
+        }
+
+        void UpdateGameState(GameTime gameTime)
+        {
+            switch (currGameState)
+            {
+                case GameState.MainMenu:
+                    { }
+                    break;
+
+                case GameState.Playing:
+                    { }
+                    break;
+            }
+        }
+
+        void DrawGameState(GameTime gameTime)
+        {
+            switch (currGameState)
+            {
+                case GameState.MainMenu:
+                    { }
+                    break;
+
+                case GameState.Playing:
+                    { }
+                    break;
+            }
+        }
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -40,7 +103,7 @@ namespace MetroidVF
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
                        
 
             base.Draw(gameTime);
