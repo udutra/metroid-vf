@@ -72,8 +72,10 @@ namespace MetroidVF
 
                         if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
                         if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
-                        if (KeyState.IsKeyDown(Keys.Up) && IsOnFirmGround()) { currPlayerState = PlayerState.Jumping; timeCounter = 0f; bkpPosition = position; }                      
-                     
+                        if (KeyState.IsKeyDown(Keys.Up) && IsOnFirmGround()) { currPlayerState = PlayerState.Jumping; timeCounter = 0f; bkpPosition = position; }
+                        if (IsOnLeft()) { return; }
+                        if (IsOnRight()) { return; }
+
                     }
                     break;
 
@@ -98,7 +100,7 @@ namespace MetroidVF
                                 speed = 100;
                                 speed += speed * dt ;
                                 currPlayerState = PlayerState.Falling;
-                            }
+                            }                            
                         }
                         else
                         {                            
@@ -163,23 +165,44 @@ namespace MetroidVF
             Vector2 min = new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f - 4);
             Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f - 4);
 
+            // System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
+            // System.Console.WriteLine("position.X: " + position.X);
+            // System.Console.WriteLine("size.X / 2f: " + ((size.X / 2f)-4));
+            // System.Console.WriteLine("position.Y: " + position.Y);
+            // System.Console.WriteLine("size.Y / 2f: " + ((size.Y / 2f)-4));
+            //
             return Game1.map.TestCollisionRect(min, max);
+
         }
 
         public bool IsOnRight()
         {
             Vector2 max = new Vector2(position.X + size.X / 2f + 4, position.Y + size.Y / 2f);
-            Vector2 min = new Vector2(position.X + size.X / 2f - 4, position.Y - size.Y / 2f);    
-                               
+            Vector2 min = new Vector2(position.X + size.X / 2f - 4, position.Y - size.Y / 2f);
+
+          // System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
+          // System.Console.WriteLine("position.X: " + position.X);
+          // System.Console.WriteLine("position.Y: " + position.Y);
+          // System.Console.WriteLine("sposition.Y - size.Y / 2f - 4: " + (position.Y - size.Y / 2f));
+          // System.Console.WriteLine("size.Y / 2f + 4: " + (size.Y / 2f));
+
             return Game1.map.TestCollisionRect(min, max);
+
         }
 
         public bool IsOnLeft()
         {
             Vector2 max = new Vector2(position.X - size.X / 2f - 4, position.Y + size.Y / 2f);
-            Vector2 min = new Vector2(position.X - size.X / 2f - 4, position.Y - size.Y / 2f); 
+            Vector2 min = new Vector2(position.X - size.X / 2f - 4, position.Y - size.Y / 2f);
+
+            //System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
+            // System.Console.WriteLine("position.X: " + position.X);
+            // System.Console.WriteLine("position.Y: " + position.Y);
+            // System.Console.WriteLine("sposition.Y - size.Y / 2f - 4: " + (position.Y - size.Y / 2f));
+            // System.Console.WriteLine("size.Y / 2f + 4: " + (size.Y / 2f));
 
             return Game1.map.TestCollisionRect(min, max);
+
         }
 
         public override void Update(GameTime gameTime)
@@ -190,13 +213,13 @@ namespace MetroidVF
             AffectWithGravity();
 
             //Falling without jump
-            if(IsOnFirmGround() == false )
-            {
-                if(currPlayerState == PlayerState.Walking)
-                {
-                    currPlayerState = PlayerState.Falling;
-                }
-            }               
+          // if(IsOnFirmGround() == false )
+          // {
+          //     if(currPlayerState == PlayerState.Walking)
+          //     {
+          //         currPlayerState = PlayerState.Falling;
+          //     }
+          // }               
 
 
             base.Update(gameTime);

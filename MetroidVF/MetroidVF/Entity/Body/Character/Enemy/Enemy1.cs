@@ -11,8 +11,7 @@ namespace MetroidVF
         Texture2D texEnemy1;        
         Vector2 moveDir;
         enum EnemyState { Right, Up, Down, Left, Stop }
-        EnemyState currentEnState = EnemyState.Right;
-        public bool rotationDown = false;
+        EnemyState currentEnState = EnemyState.Right;        
 
         void EnterEnemyState(EnemyState newState)
         {
@@ -93,14 +92,15 @@ namespace MetroidVF
             switch (currentEnState)
             {
                 case EnemyState.Right:
-                    {
+                    {                        
                         moveDir = Vector2.Zero;
                         if (IsOnFirmGround())
                         {
                             { moveDir += Vector2.UnitX; }                            
                         }
                         else
-                        {                          
+                        {
+                            rotation += 1.60f;
                             currentEnState = EnemyState.Down;
                         }                
                     }
@@ -108,37 +108,54 @@ namespace MetroidVF
 
                 case EnemyState.Left:
                     {
-                   //   moveDir = Vector2.Zero;
-                   //  moveDir -= Vector2.UnitX;
-                   //  if (IsOnRoof())
-                   //  {
-                   //      moveDir -= Vector2.UnitX;
-                   //  }
-                   //  else
-                   //  {
-                   //      currentEnState = EnemyState.Up;
-                   //  }
+                      moveDir = Vector2.Zero;
+                  
+                      if (IsOnRoof())
+                      {
+                       //   moveDir -= Vector2.UnitX;
+                      }
+                      else
+                      {
+                       //   rotation += 1.60f;
+                        //  currentEnState = EnemyState.Up;
+                      }
                     }
                     break;
 
                 case EnemyState.Up:
-                    {                       
+                    {
+                        moveDir = Vector2.Zero;
 
+                        if (IsOnRight())
+                        {
+                          //  moveDir -= Vector2.UnitY;
+                        }
+                      //  else
+                      //  {
+                      //      rotation += 1.60f;
+                      //      currentEnState = EnemyState.Right;
+                      //  }
                     }
                     break;
 
                 case EnemyState.Down:
                     {
                         moveDir = Vector2.Zero;
-                        moveDir += Vector2.UnitY;
+                        if (IsOnLeft() && IsOnFirmGround())
+                        {
+                            rotation -= 1.60f;
+                            currentEnState = EnemyState.Right;
+                        }
+
                         if (IsOnLeft())
                         {
-                            moveDir += Vector2.UnitY;
+                            moveDir += Vector2.UnitY;                            
                         }
                         else
                         {
+                            rotation += 1.60f;
                             currentEnState = EnemyState.Left;
-                        }
+                        }                        
                     }
                     break;
 
@@ -176,16 +193,18 @@ namespace MetroidVF
         {
             Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f + 1);
             Vector2 max = new Vector2(position.X + size.X / 2f, position.Y + size.Y / 2f + 1);
-            System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
+           // System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
 
             return Game1.map.TestCollisionRect(min, max);
         }
 
         public bool IsOnRoof()
         {
-            Vector2 min = new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f - 1);
-            Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f - 1);
+            Vector2 min = new Vector2(position.X - size.X / 2f-4, position.Y - size.Y / 2f -4);
+            Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f );
             System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
+           // System.Console.WriteLine("position.X: " + position.X);
+          //  System.Console.WriteLine("position.Y: " + position.Y);
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -201,11 +220,17 @@ namespace MetroidVF
 
         public bool IsOnLeft()
         {
-            Vector2 max = new Vector2(position.X - size.X / 2f - 4, position.Y + size.Y / 2f);
-            Vector2 min = new Vector2(position.X - size.X / 2f - 4, position.Y - size.Y / 2f);
-            System.Console.WriteLine("RETORNO ESQUERDA: " + Game1.map.TestCollisionRect(min, max));
+            Vector2 max = new Vector2(position.X - size.X / 2f  , position.Y + size.Y / 2f + 4 );
+            Vector2 min = new Vector2(position.X - size.X / 2f -4, position.Y - size.Y / 2f  );
+
+            //System.Console.WriteLine("RETORNO ESQUERDO: " + Game1.map.TestCollisionRect(min, max));
+            // System.Console.WriteLine("position.X: " + position.X);
+            // System.Console.WriteLine("position.Y: " + position.Y);
+            // System.Console.WriteLine("sposition.Y - size.Y / 2f - 4: " + (position.Y - size.Y / 2f));
+            // System.Console.WriteLine("size.Y / 2f + 4: " + (size.Y / 2f));
 
             return Game1.map.TestCollisionRect(min, max);
+
         }
 
         private void AffectWithGravity()
@@ -224,22 +249,8 @@ namespace MetroidVF
         }
 
         public override void Draw(GameTime gameTime)
-        {
-         //   //size = new Vector2(texEnemy1.Width - 2, texEnemy1.Height - 2);
-         //   if (rotationDown) 
-         //   {
-         //       Game1.spriteBatch.Draw(texEnemy1, 
-         //       Game1.camera.ProjectPos(position),
-         //       null,
-         //       Color.White,
-         //       90f,
-         //       new Vector2(texEnemy1.Width, texEnemy1.Height) / 2f,
-         //       Game1.camera.ProjectScale(new Vector2(size.X / texEnemy1.Width, size.Y / texEnemy1.Height)),
-         //       SpriteEffects.None,
-         //       0.0f
-         //       );
-            //}
-
+        {          
+            
           base.Draw(gameTime);
         }
     }
