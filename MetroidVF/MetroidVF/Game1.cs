@@ -104,7 +104,7 @@ namespace MetroidVF
             entities.Add(map = new Map("Content/Map/map.tmx", "Map/metroidset"));
 
             entities.Add(new Human(new Vector2(505, 173)));
-            // entities.Add(new Enemy1(new Vector2(553, 41)));
+             entities.Add(new Enemy1(new Vector2(553, 41)));
             entities.Add(new Enemy1(new Vector2(450, 41)));
             // entities.Add(new Enemy1(new Vector2(590, 201)));
             Human.Content = Content;

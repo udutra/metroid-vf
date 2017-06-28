@@ -94,13 +94,20 @@ namespace MetroidVF
                 case EnemyState.Right:
                     {                        
                         moveDir = Vector2.Zero;
+
+                      //  if (IsOnFirmGround() && IsOnRight())
+                      //  {
+                      //      rotation -= 1.57f;
+                      //      currentEnState = EnemyState.Up;
+                      //  }
+
                         if (IsOnFirmGround())
                         {
                             { moveDir += Vector2.UnitX; }                            
                         }
                         else
                         {
-                            rotation += 1.60f;
+                            rotation += 1.57f;
                             currentEnState = EnemyState.Down;
                         }                
                     }
@@ -112,12 +119,12 @@ namespace MetroidVF
                   
                       if (IsOnRoof())
                       {
-                       //   moveDir -= Vector2.UnitX;
+                          moveDir -= Vector2.UnitX;
                       }
                       else
                       {
-                       //   rotation += 1.60f;
-                        //  currentEnState = EnemyState.Up;
+                          rotation += 1.57f;
+                         currentEnState = EnemyState.Up;
                       }
                     }
                     break;
@@ -128,22 +135,23 @@ namespace MetroidVF
 
                         if (IsOnRight())
                         {
-                          //  moveDir -= Vector2.UnitY;
+                            moveDir -= Vector2.UnitY;
                         }
-                      //  else
-                      //  {
-                      //      rotation += 1.60f;
-                      //      currentEnState = EnemyState.Right;
-                      //  }
+                        else
+                        {
+                            rotation += 1.57f;
+                            currentEnState = EnemyState.Right;
+                        }
                     }
                     break;
 
                 case EnemyState.Down:
                     {
                         moveDir = Vector2.Zero;
+
                         if (IsOnLeft() && IsOnFirmGround())
                         {
-                            rotation -= 1.60f;
+                            rotation -= 1.57f;
                             currentEnState = EnemyState.Right;
                         }
 
@@ -153,14 +161,20 @@ namespace MetroidVF
                         }
                         else
                         {
-                            rotation += 1.60f;
+                            rotation += 1.57f;
                             currentEnState = EnemyState.Left;
                         }                        
                     }
                     break;
 
                 case EnemyState.Stop:
-                    {                       
+                    {
+                        moveDir = Vector2.Zero;
+                        if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                        if (IsOnFirmGround())
+                        {                            
+                        }
                     }
                     break;
             }
@@ -191,9 +205,9 @@ namespace MetroidVF
 
         public bool IsOnFirmGround()
         {
-            Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f + 1);
-            Vector2 max = new Vector2(position.X + size.X / 2f, position.Y + size.Y / 2f + 1);
-           // System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
+            Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f);
+            Vector2 max = new Vector2(position.X + size.X / 2f + 4 , position.Y + size.Y / 2f + 4);
+            System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -201,10 +215,10 @@ namespace MetroidVF
         public bool IsOnRoof()
         {
             Vector2 min = new Vector2(position.X - size.X / 2f-4, position.Y - size.Y / 2f -4);
-            Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f );
-            System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
-           // System.Console.WriteLine("position.X: " + position.X);
-          //  System.Console.WriteLine("position.Y: " + position.Y);
+            Vector2 max = new Vector2(position.X + size.X / 2f , position.Y - size.Y / 2f );
+          //  System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
+          //  System.Console.WriteLine("position.X: " + position.X);
+          // System.Console.WriteLine("position.Y: " + position.Y);
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -212,8 +226,8 @@ namespace MetroidVF
         public bool IsOnRight()
         {
             Vector2 max = new Vector2(position.X + size.X / 2f + 1, position.Y + size.Y / 2f);
-            Vector2 min = new Vector2(position.X + size.X / 2f + 1, position.Y - size.Y / 2f);
-            System.Console.WriteLine("RETORNO DIREITA: " + Game1.map.TestCollisionRect(min, max));
+            Vector2 min = new Vector2(position.X + size.X / 2f + 4, position.Y - size.Y / 2f - 4);
+          //  System.Console.WriteLine("RETORNO DIREITA: " + Game1.map.TestCollisionRect(min, max));
 
             return Game1.map.TestCollisionRect(min, max);
         }
