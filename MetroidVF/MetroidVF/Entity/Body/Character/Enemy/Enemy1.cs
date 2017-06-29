@@ -11,7 +11,7 @@ namespace MetroidVF
         Texture2D texEnemy1;        
         Vector2 moveDir;
         enum EnemyState { Right, Up, Down, Left, Stop }
-        EnemyState currentEnState = EnemyState.Right;        
+        EnemyState currentEnState = EnemyState.Stop;        
 
         void EnterEnemyState(EnemyState newState)
         {
@@ -95,20 +95,20 @@ namespace MetroidVF
                     {                        
                         moveDir = Vector2.Zero;
 
-                      //  if (IsOnFirmGround() && IsOnRight())
-                      //  {
-                      //      rotation -= 1.57f;
-                      //      currentEnState = EnemyState.Up;
-                      //  }
+                      if (IsOnFirmGround() && IsOnRight())
+                      {
+                          rotation -= 1.57f;
+                          currentEnState = EnemyState.Up;
+                      }
 
                         if (IsOnFirmGround())
                         {
-                            { moveDir += Vector2.UnitX; }                            
+                             moveDir += Vector2.UnitX;                           
                         }
                         else
                         {
                             rotation += 1.57f;
-                            currentEnState = EnemyState.Down;
+                            currentEnState = EnemyState.Down ;
                         }                
                     }
                     break;
@@ -117,15 +117,15 @@ namespace MetroidVF
                     {
                       moveDir = Vector2.Zero;
                   
-                      if (IsOnRoof())
-                      {
-                          moveDir -= Vector2.UnitX;
-                      }
-                      else
-                      {
-                          rotation += 1.57f;
-                         currentEnState = EnemyState.Up;
-                      }
+                        if (IsOnRoof())
+                        {
+                            moveDir -= Vector2.UnitX;
+                        }
+                        else
+                        {
+                            rotation += 1.57f;
+                           currentEnState = EnemyState.Up;
+                        }
                     }
                     break;
 
@@ -161,8 +161,8 @@ namespace MetroidVF
                         }
                         else
                         {
-                            rotation += 1.57f;
-                            currentEnState = EnemyState.Left;
+                           rotation += 1.57f;
+                           currentEnState = EnemyState.Left;
                         }                        
                     }
                     break;
@@ -170,11 +170,16 @@ namespace MetroidVF
                 case EnemyState.Stop:
                     {
                         moveDir = Vector2.Zero;
-                        if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
-                        if (IsOnFirmGround())
-                        {                            
-                        }
+                       if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
+                       if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                       if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
+                       if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
+                      
+                      
+                       if (IsOnFirmGround())
+                       {
+                            currentEnState = EnemyState.Right;
+                       }
                     }
                     break;
             }
@@ -183,7 +188,7 @@ namespace MetroidVF
         public Enemy1(Vector2 initPos) : base(initPos)
         {
             speed /= 2f;
-            size = new Vector2(32,32);
+            size = size * 2;
         }
 
         public override Vector2 GetDir()
@@ -206,8 +211,10 @@ namespace MetroidVF
         public bool IsOnFirmGround()
         {
             Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f);
-            Vector2 max = new Vector2(position.X + size.X / 2f + 4 , position.Y + size.Y / 2f + 4);
-            System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
+            Vector2 max = new Vector2(position.X + size.X / 2f + 4, position.Y + size.Y / 2f + 4);
+          // System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
+          // System.Console.WriteLine("position: " + position);
+            
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -216,9 +223,9 @@ namespace MetroidVF
         {
             Vector2 min = new Vector2(position.X - size.X / 2f-4, position.Y - size.Y / 2f -4);
             Vector2 max = new Vector2(position.X + size.X / 2f , position.Y - size.Y / 2f );
-          //  System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
-          //  System.Console.WriteLine("position.X: " + position.X);
-          // System.Console.WriteLine("position.Y: " + position.Y);
+           // System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
+           // System.Console.WriteLine("position.X: " + position.X);
+           // System.Console.WriteLine("position.Y: " + position.Y);
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -237,7 +244,7 @@ namespace MetroidVF
             Vector2 max = new Vector2(position.X - size.X / 2f  , position.Y + size.Y / 2f + 4 );
             Vector2 min = new Vector2(position.X - size.X / 2f -4, position.Y - size.Y / 2f  );
 
-            //System.Console.WriteLine("RETORNO ESQUERDO: " + Game1.map.TestCollisionRect(min, max));
+            // System.Console.WriteLine("RETORNO ESQUERDO: " + Game1.map.TestCollisionRect(min, max));
             // System.Console.WriteLine("position.X: " + position.X);
             // System.Console.WriteLine("position.Y: " + position.Y);
             // System.Console.WriteLine("sposition.Y - size.Y / 2f - 4: " + (position.Y - size.Y / 2f));
@@ -247,18 +254,25 @@ namespace MetroidVF
 
         }
 
-        private void AffectWithGravity()
+        public override bool IgnoreCollision(Entity other)
         {
-            //Gravity
-            moveDir += Vector2.UnitY * .5f;
+            if (other is Enemy1)
+            {
+                return true;
+            }
+
+            if (other is Human)
+            {
+                return true;
+            }
+            return false;
         }
 
         public override void Update(GameTime gameTime)
         {
             UpdateEnemyState(gameTime);
 
-            //AffectWithGravity();
-
+            
             base.Update(gameTime);
         }
 

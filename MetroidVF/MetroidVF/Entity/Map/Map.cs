@@ -97,7 +97,7 @@ namespace MetroidVF
                    continue;
           
                Vector2 myMin = new Vector2(x * tileWidth, y * tileHeight);
-               Vector2 myMax = myMin + new Vector2(tileWidth, tileHeight);
+               Vector2 myMax = myMin + new Vector2(tileWidth, tileHeight - 3);
           
                if ((testMax.X >= myMin.X) && (testMax.Y >= myMin.Y) &&
                    (testMin.X <= myMax.X) && (testMin.Y <= myMax.Y))

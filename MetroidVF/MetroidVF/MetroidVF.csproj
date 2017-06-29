@@ -45,6 +45,7 @@
     <Compile Include="Entity\Body\Body.cs" />
     <Compile Include="Entity\Body\Character\Character.cs" />
     <Compile Include="Entity\Body\Character\Enemy\Enemy1.cs" />
+    <Compile Include="Entity\Body\Character\Enemy\Enemy2.cs" />
     <Compile Include="Entity\Body\Character\Human\Human.cs" />
     <Compile Include="Entity\Camera\Camera.cs" />
     <Compile Include="Entity\Entity.cs" />

@@ -7,7 +7,7 @@ namespace MetroidVF
     {
         public Vector2 position;
         public Vector2 size;
-        public float speed = 100f;
+        public float speed = 200f;
         public float rotation = 0;
 
         public Body(Vector2 initPos)
@@ -85,7 +85,7 @@ namespace MetroidVF
                 return;
 
             //Texture Real Size
-            size = new Vector2(texture.Width - 2, texture.Height - 2);
+            size = new Vector2(texture.Width - 4, texture.Height - 4);
             
              Game1.spriteBatch.Draw(texture,      
              Game1.camera.ProjectPos(position),
