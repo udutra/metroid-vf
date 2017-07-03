@@ -202,7 +202,7 @@ namespace MetroidVF
             {
                 case PlayerState.Start:
                     {                        
-                       if (timeCounter <= 4f)
+                       if (timeCounter <= 5f)
                        {                           
                            timeCounter += dt;
                        }

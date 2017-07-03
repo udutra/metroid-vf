@@ -7,11 +7,18 @@ namespace MetroidVF
 {
     public class Enemy1 : Character
     {
+        SpriteSheet spriteSheet;
         private static ContentManager content;
-        Texture2D texEnemy1;        
+        float animFrame = 0f;
+        float animSpeed = 0f;
+        int frameStart;
+        int frameEnd;
+        int animTotalFrames;
+        Texture2D teste;
         Vector2 moveDir;
+
         enum EnemyState { Right, Up, Down, Left, Stop }
-        EnemyState currentEnState = EnemyState.Stop;        
+        EnemyState currentEnState = EnemyState.Stop;
 
         void EnterEnemyState(EnemyState newState)
         {
@@ -53,7 +60,7 @@ namespace MetroidVF
         }
 
         void LeaveEnemyState()
-        {          
+        {
             switch (currentEnState)
             {
                 case EnemyState.Right:
@@ -92,31 +99,31 @@ namespace MetroidVF
             switch (currentEnState)
             {
                 case EnemyState.Right:
-                    {                        
+                    {
                         moveDir = Vector2.Zero;
 
-                      if (IsOnFirmGround() && IsOnRight())
-                      {
-                          rotation -= 1.57f;
-                          currentEnState = EnemyState.Up;
-                      }
+                        if (IsOnFirmGround() && IsOnRight())
+                        {
+                            rotation -= 1.57f;
+                            currentEnState = EnemyState.Up;
+                        }
 
                         if (IsOnFirmGround())
                         {
-                             moveDir += Vector2.UnitX;                           
+                            moveDir += Vector2.UnitX;
                         }
                         else
                         {
                             rotation += 1.57f;
-                            currentEnState = EnemyState.Down ;
-                        }                
+                            currentEnState = EnemyState.Down;
+                        }
                     }
                     break;
 
                 case EnemyState.Left:
                     {
-                      moveDir = Vector2.Zero;
-                  
+                        moveDir = Vector2.Zero;
+
                         if (IsOnRoof())
                         {
                             moveDir -= Vector2.UnitX;
@@ -124,7 +131,7 @@ namespace MetroidVF
                         else
                         {
                             rotation += 1.57f;
-                           currentEnState = EnemyState.Up;
+                            currentEnState = EnemyState.Up;
                         }
                     }
                     break;
@@ -157,38 +164,64 @@ namespace MetroidVF
 
                         if (IsOnLeft())
                         {
-                            moveDir += Vector2.UnitY;                            
+                            moveDir += Vector2.UnitY;
                         }
                         else
                         {
-                           rotation += 1.57f;
-                           currentEnState = EnemyState.Left;
-                        }                        
+                            rotation += 1.57f;
+                            currentEnState = EnemyState.Left;
+                        }
                     }
                     break;
 
                 case EnemyState.Stop:
                     {
                         moveDir = Vector2.Zero;
-                       if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                       if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
-                       if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
-                       if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
-                      
-                      
-                       if (IsOnFirmGround())
-                       {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
+
+
+                        if (IsOnFirmGround())
+                        {
                             currentEnState = EnemyState.Right;
-                       }
+                        }
                     }
                     break;
             }
         }
 
+        public void PlayAnim(int frameStart, int frameEnd, float animSpeed)
+        {
+            animFrame = (float)frameStart;
+            this.frameStart = frameStart;
+            this.frameEnd = frameEnd;
+            this.animSpeed = animSpeed;
+
+            animTotalFrames = frameEnd - frameStart + 1;
+        }
+
+        public void UpdateAnim(float dt)
+        {
+            animFrame -= frameStart;
+
+            animFrame += dt * animSpeed;
+
+            animFrame = animFrame % animTotalFrames;
+            if (animFrame < 0f)
+                animFrame += animTotalFrames;
+
+            animFrame += frameStart;
+        }
+
         public Enemy1(Vector2 initPos) : base(initPos)
         {
-            speed /= 2f;
-            size = size * 2;
+            speed /= 2f;            
+            teste = Content.Load<Texture2D>("SpriteSheets/enemy1Sheet");
+            spriteSheet = new SpriteSheet(teste, 2, 1);
+
+            PlayAnim(0, 1, 5.0f);
         }
 
         public override Vector2 GetDir()
@@ -204,45 +237,54 @@ namespace MetroidVF
 
         public override Texture2D GetSprite()
         {
-            texEnemy1 = Content.Load<Texture2D>("Sprites/enemy1");
-            return texEnemy1;
+            return spriteSheet.tex;
+        }
+
+        public override Vector2 GetSize()
+        {
+            return new Vector2(32, 64);
+        }
+
+        public override Rectangle? GetSourceRectangle()
+        {
+            return spriteSheet.GetSourceRectangle((int)animFrame);
         }
 
         public bool IsOnFirmGround()
         {
             Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f);
             Vector2 max = new Vector2(position.X + size.X / 2f + 4, position.Y + size.Y / 2f + 4);
-          // System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
-          // System.Console.WriteLine("position: " + position);
-            
+            //  System.Console.WriteLine("RETORNO CHAO: " + Game1.map.TestCollisionRect(min, max));
+            //  System.Console.WriteLine("position: " + position);
+
 
             return Game1.map.TestCollisionRect(min, max);
         }
 
         public bool IsOnRoof()
         {
-            Vector2 min = new Vector2(position.X - size.X / 2f-4, position.Y - size.Y / 2f -4);
-            Vector2 max = new Vector2(position.X + size.X / 2f , position.Y - size.Y / 2f );
-           // System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
-           // System.Console.WriteLine("position.X: " + position.X);
-           // System.Console.WriteLine("position.Y: " + position.Y);
+            Vector2 min = new Vector2(position.X - size.X / 2f - 4, position.Y - size.Y / 2f - 4);
+            Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f);
+            // System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
+            // System.Console.WriteLine("position.X: " + position.X);
+            // System.Console.WriteLine("position.Y: " + position.Y);
 
             return Game1.map.TestCollisionRect(min, max);
         }
 
         public bool IsOnRight()
         {
-            Vector2 max = new Vector2(position.X + size.X / 2f + 1, position.Y + size.Y / 2f);
-            Vector2 min = new Vector2(position.X + size.X / 2f + 4, position.Y - size.Y / 2f - 4);
-          //  System.Console.WriteLine("RETORNO DIREITA: " + Game1.map.TestCollisionRect(min, max));
+            Vector2 max = new Vector2(position.X + size.X / 2f + 4, position.Y + size.Y / 2f);
+            Vector2 min = new Vector2(position.X + size.X / 2f + 6, position.Y - size.Y / 2f - 4);
+            //  System.Console.WriteLine("RETORNO DIREITA: " + Game1.map.TestCollisionRect(min, max));
 
             return Game1.map.TestCollisionRect(min, max);
         }
 
         public bool IsOnLeft()
         {
-            Vector2 max = new Vector2(position.X - size.X / 2f  , position.Y + size.Y / 2f + 4 );
-            Vector2 min = new Vector2(position.X - size.X / 2f -4, position.Y - size.Y / 2f  );
+            Vector2 max = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f + 4);
+            Vector2 min = new Vector2(position.X - size.X / 2f - 4, position.Y - size.Y / 2f);
 
             // System.Console.WriteLine("RETORNO ESQUERDO: " + Game1.map.TestCollisionRect(min, max));
             // System.Console.WriteLine("position.X: " + position.X);
@@ -270,16 +312,9 @@ namespace MetroidVF
 
         public override void Update(GameTime gameTime)
         {
+            UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
             UpdateEnemyState(gameTime);
-
-            
             base.Update(gameTime);
-        }
-
-        public override void Draw(GameTime gameTime)
-        {          
-            
-          base.Draw(gameTime);
         }
     }
 }

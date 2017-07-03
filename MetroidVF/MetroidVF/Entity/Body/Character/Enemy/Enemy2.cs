@@ -6,9 +6,7 @@ using Microsoft.Xna.Framework.Content;
 namespace MetroidVF
 {
     public class Enemy2 : Character
-    {
-        public float visionRadius = 64f;
-
+    {      
         SpriteSheet spriteSheet;
         private static ContentManager content;
         float animFrame = 0f;
@@ -220,8 +218,8 @@ namespace MetroidVF
         public Enemy2(Vector2 initPos) : base(initPos)
      {
             speed /= 2f;
-           // size = new Vector2(32, 32);
-            teste = Content.Load<Texture2D>("SpriteSheets/testeSheet1");
+           
+            teste = Content.Load<Texture2D>("SpriteSheets/enemy2Sheet");
             spriteSheet =
         new SpriteSheet(teste, 2, 1);
 

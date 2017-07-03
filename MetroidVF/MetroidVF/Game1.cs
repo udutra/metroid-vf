@@ -13,8 +13,7 @@ namespace MetroidVF
         public static SpriteBatch spriteBatch;
         public static Camera camera = null;
         public static List<Entity> entities = new List<Entity>();
-        public static Map map;
-        public static Texture2D textest;        
+        public static Map map;              
 
         enum GameState { Null, MainMenu, Playing };
         GameState currGameState = GameState.MainMenu;
@@ -107,12 +106,16 @@ namespace MetroidVF
 
             entities.Add(new Human(new Vector2(1500, 325)));
 
-            //Enemy POS OK!
+            //Enemy2 POS OK!
             entities.Add(new Enemy2(new Vector2(905, 80)));
             entities.Add(new Enemy2(new Vector2(1102, 81)));
-                       
 
-            textest = Content.Load<Texture2D>("Sprites/enemy1");
+            //Enemy2 POS OK!
+            entities.Add(new Enemy1(new Vector2(1500, 80)));
+            //entities.Add(new Enemy2(new Vector2(1102, 81)));
+
+
+            
         }
         
         protected override void UnloadContent()
