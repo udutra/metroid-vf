@@ -17,11 +17,12 @@ namespace MetroidVF
         Vector2 bkpPosition;
         GameTime gameTimeLeave;
         SpriteSheet spriteSheet;
+        /*SpriteSheet spriteBolinha;
         float animFrame = 0f;
         float animSpeed = 0f;
         int frameStart;
         int frameEnd;
-        int animTotalFrames;
+        int animTotalFrames;*/
         public bool lookingRight;       
 
         enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling };
@@ -41,7 +42,7 @@ namespace MetroidVF
                 case PlayerState.Start:
                     {
                         //Animation Start
-                        PlayAnim(0, 3, 0.7f);                                                
+                        spriteSheet.PlayAnim(0, 3, 0.7f);
                     }
                     break;
 
@@ -52,11 +53,11 @@ namespace MetroidVF
                         if (lookingRight == true)
                         {
                             //Animation Idle
-                            PlayAnim(4, 4, 1f);
+                            spriteSheet.PlayAnim(4, 4, 1f);
                         }
                         else
                         {
-                            PlayAnim(23, 23, 1f);
+                            spriteSheet.PlayAnim(23, 23, 1f);
                         }
                     }
                     break;
@@ -66,7 +67,7 @@ namespace MetroidVF
                         speed = 200;
                         lookingRight = true;
                         //Animation Right
-                        PlayAnim(6, 8, 12f);                        
+                        spriteSheet.PlayAnim(6, 8, 12f);                        
                     }
                     break;
 
@@ -75,7 +76,7 @@ namespace MetroidVF
                         speed = 200;
                         lookingRight = false;
                         //Animation Left
-                        PlayAnim(19, 21, 12f);
+                        spriteSheet.PlayAnim(19, 21, 12f);
                     }
                     break;
 
@@ -88,11 +89,11 @@ namespace MetroidVF
                         //Animation Jumping Direction
                         if (lookingRight == true)
                         {
-                            PlayAnim(9, 9, 12f);
+                            spriteSheet.PlayAnim(9, 9, 12f);
                         }
                         else
                         {
-                            PlayAnim(18, 18, 1f);
+                            spriteSheet.PlayAnim(18, 18, 1f);
                         }
                     }
                     break;
@@ -104,7 +105,7 @@ namespace MetroidVF
                         bkpPosition = position;
 
                         //Animation Jumping Right
-                        PlayAnim(10, 13, 15f);
+                        spriteSheet.PlayAnim(10, 13, 15f);
                     }
                     break;
 
@@ -115,7 +116,7 @@ namespace MetroidVF
                         bkpPosition = position;
 
                         //Animation Jumping Left
-                        PlayAnim(14, 17, 12f);
+                        spriteSheet.PlayAnim(14, 17, 12f);
                     }
                     break;
 
@@ -125,12 +126,12 @@ namespace MetroidVF
                         if (oldJumpState == PlayerState.Jumping)
                         {
                             if (lookingRight == true)
-                            {   
-                                PlayAnim(9, 9, 1f);
+                            {
+                                spriteSheet.PlayAnim(9, 9, 1f);
                             }
                             else
                             {
-                                PlayAnim(18, 18, 1f);
+                                spriteSheet.PlayAnim(18, 18, 1f);
                             }
                         }
 
@@ -139,11 +140,11 @@ namespace MetroidVF
                             if (lookingRight == true)
                             {
                                 //Animation Idle
-                                PlayAnim(10, 13, 15f);
+                                spriteSheet.PlayAnim(10, 13, 15f);
                             }
                             else
                             {
-                                PlayAnim(14, 17, 12f);
+                                spriteSheet.PlayAnim(14, 17, 12f);
                             }
                         }
                     }
@@ -208,7 +209,7 @@ namespace MetroidVF
                        }
                        else
                        {
-                            PlayAnim(3, 3, 1f);
+                            spriteSheet.PlayAnim(3, 3, 1f);
                             if (Keyboard.GetState().IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
                             if (Keyboard.GetState().IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
                             if (KeyState.IsKeyDown(Keys.Up) && IsOnFirmGround()) { EnterPlayerState(PlayerState.Jumping); }
@@ -401,7 +402,7 @@ namespace MetroidVF
             }
         }       
 
-        public void PlayAnim(int frameStart, int frameEnd, float animSpeed)
+        /*public void PlayAnim(int frameStart, int frameEnd, float animSpeed)
         {
             animFrame = (float)frameStart;
             this.frameStart = frameStart;
@@ -422,7 +423,7 @@ namespace MetroidVF
                 animFrame += animTotalFrames;
 
             animFrame += frameStart;
-        }
+        }*/
 
         public Human(Vector2 initPos) : base(initPos)
         {
@@ -433,6 +434,8 @@ namespace MetroidVF
             
 
         }
+
+        
 
         public override Vector2 GetDir() { return moveDir; }
 
@@ -456,7 +459,7 @@ namespace MetroidVF
 
         public override Rectangle? GetSourceRectangle()
         {
-            return spriteSheet.GetSourceRectangle((int)animFrame);
+            return spriteSheet.GetSourceRectangle((int)spriteSheet.animFrame);
         }
 
         private void AffectWithGravity()
@@ -522,7 +525,7 @@ namespace MetroidVF
         public override void Update(GameTime gameTime)
         {
             KeyState = Keyboard.GetState();
-            UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
+            spriteSheet.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
             UpdatePlayerState(gameTime);
             
             

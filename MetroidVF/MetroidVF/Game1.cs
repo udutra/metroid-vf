@@ -13,7 +13,8 @@ namespace MetroidVF
         public static SpriteBatch spriteBatch;
         public static Camera camera = null;
         public static List<Entity> entities = new List<Entity>();
-        public static Map map;              
+        public static Map map;
+        Texture2D uiTex;             
 
         enum GameState { Null, MainMenu, Playing };
         GameState currGameState = GameState.MainMenu;
@@ -110,13 +111,17 @@ namespace MetroidVF
             //Enemy2 POS OK!
             entities.Add(new Enemy2(new Vector2(905, 80)));
             entities.Add(new Enemy2(new Vector2(1102, 81)));
-         
+           // entities.Add(new Enemy2(new Vector2(1300, 120)));
+
+
 
             //Enemy1 POS OK!
             entities.Add(new Enemy1(new Vector2(1457, 60)));
             entities.Add(new Enemy1(new Vector2(1616, 125)));
+            uiTex = Content.Load<Texture2D>("Sprites/UI");
 
-            entities.Add(new UI(new Vector2(1400, 125)));
+
+            
             
         }
         
@@ -146,7 +151,11 @@ namespace MetroidVF
             foreach (Entity e in entities)
                 e.Draw(gameTime);
 
+            spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
+
             spriteBatch.End();
+
+
             
             base.Draw(gameTime);
         }
