@@ -42,6 +42,6 @@ namespace MetroidVF
 
           //  if (health <= 0.0f)
             //    Game1.entities.Remove(this);
-        }
+        }     
     }
 }

@@ -176,16 +176,16 @@ namespace MetroidVF
 
                 case EnemyState.Stop:
                     {
-                        moveDir = Vector2.Zero;
-                        if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
+                       // moveDir = Vector2.Zero;
+                       // if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
+                       // if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                       // if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
+                       // if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
+                       
 
-
-                        if (IsOnFirmGround())
+                        if (IsOnRoof())
                         {
-                            currentEnState = EnemyState.Right;
+                           // currentEnState = EnemyState.Right;
                         }
                     }
                     break;
@@ -265,9 +265,9 @@ namespace MetroidVF
         {
             Vector2 min = new Vector2(position.X - size.X / 2f - 4, position.Y - size.Y / 2f - 4);
             Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f);
-            // System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
-            // System.Console.WriteLine("position.X: " + position.X);
-            // System.Console.WriteLine("position.Y: " + position.Y);
+          // System.Console.WriteLine("position.X: " + position.X);
+          // System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
+          // System.Console.WriteLine("position.Y: " + position.Y);
 
             return Game1.map.TestCollisionRect(min, max);
         }

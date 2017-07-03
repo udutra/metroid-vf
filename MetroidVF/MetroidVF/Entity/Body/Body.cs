@@ -13,12 +13,7 @@ namespace MetroidVF
         public Body(Vector2 initPos)
         {
             position = initPos;
-        }
-
-        // public float GetRadius()
-        // {
-        //   return Math.Max(size.X, size.Y) / 2f;
-        // }
+        }      
 
         public Vector2 GetMin() { return position - size / 2; }
         public Vector2 GetMax() { return position + size / 2; }
@@ -118,7 +113,7 @@ namespace MetroidVF
                 spriteHeight = ((Rectangle)sourceRectangle).Height;
             }
 
-            Game1.spriteBatch.Draw(sprite,
+              Game1.spriteBatch.Draw(sprite,
               Game1.camera.ProjectPos(position),
               sourceRectangle,
               Color.White,

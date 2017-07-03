@@ -544,5 +544,10 @@ namespace MetroidVF
             Game1.camera.camPos = position;
             Game1.camera.camZoom = camZoom;
         }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+        }
     }
 }

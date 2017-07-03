@@ -103,18 +103,20 @@ namespace MetroidVF
             Human.Content = Content;
             Enemy1.Content = Content;
             Enemy2.Content = Content;
+            UI.Content = Content;
 
             entities.Add(new Human(new Vector2(1500, 325)));
 
             //Enemy2 POS OK!
             entities.Add(new Enemy2(new Vector2(905, 80)));
             entities.Add(new Enemy2(new Vector2(1102, 81)));
+         
 
-            //Enemy2 POS OK!
-            entities.Add(new Enemy1(new Vector2(1500, 80)));
-            //entities.Add(new Enemy2(new Vector2(1102, 81)));
+            //Enemy1 POS OK!
+            entities.Add(new Enemy1(new Vector2(1457, 60)));
+            entities.Add(new Enemy1(new Vector2(1616, 125)));
 
-
+            entities.Add(new UI(new Vector2(1400, 125)));
             
         }
         
@@ -145,8 +147,7 @@ namespace MetroidVF
                 e.Draw(gameTime);
 
             spriteBatch.End();
-
-
+            
             base.Draw(gameTime);
         }
     }
