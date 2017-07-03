@@ -35,6 +35,10 @@ namespace MetroidVF
                 mapWidth = int.Parse(layer.Attributes["width"].Value);
                 mapHeight = int.Parse(layer.Attributes["height"].Value);
 
+                //Debug.Print("Name: " + layer.Attributes["name"].Value);
+                //Debug.Print("Width: " + mapWidth);
+                //Debug.Print("Height: " + mapHeight);
+
                 tiles = new int[mapWidth, mapHeight];
 
                 string data = layer.SelectSingleNode("data").InnerText.Trim();
@@ -49,6 +53,8 @@ namespace MetroidVF
                     }
                 }
 
+                //Debug.Print("Data: " + data);
+
                 break;
             }
 
@@ -58,56 +64,55 @@ namespace MetroidVF
         public override void Draw(GameTime gameTime)
         {
 
-           int columns = tileset.Width / tileWidth;
+            int columns = tileset.Width / tileWidth;
 
-           for (int y = 0; y < mapHeight; y++)
-           {
-              for (int x = 0; x < mapWidth; x++)
-              {
-                 int tile = tiles[x, y];
-                 if (tile == 0)
-                     continue;
-             
-                 tile--; //make tile index to be zero-base!
-             
-                 Vector2 pos = new Vector2(x * tileWidth, y * tileHeight);
-             
-                 Rectangle sourceRect;
-             
-                 sourceRect.X = (tile % columns) * tileWidth;
-                 sourceRect.Y = (tile / columns) * tileHeight;
-                 sourceRect.Width = tileWidth;
-                 sourceRect.Height = tileHeight;
-             
-                 Game1.spriteBatch.Draw(tileset, Game1.camera.ProjectPos(pos), sourceRect,
-                 Color.White, 0.0f, Vector2.Zero, Game1.camera.ProjectScale(Vector2.One), SpriteEffects.None, 1.0f);
-             
-              }
-           }
+            for (int y = 0; y < mapHeight; y++)
+            {
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    int tile = tiles[x, y];
+                    if (tile == 0)
+                        continue;
+
+                    tile--; //make tile index to be zero-base!
+
+                    Vector2 pos = new Vector2(x * tileWidth, y * tileHeight);
+
+                    Rectangle sourceRect;
+
+                    sourceRect.X = (tile % columns) * tileWidth;
+                    sourceRect.Y = (tile / columns) * tileHeight;
+                    sourceRect.Width = tileWidth;
+                    sourceRect.Height = tileHeight;
+
+                    Game1.spriteBatch.Draw(tileset, Game1.camera.ProjectPos(pos),
+                      sourceRect, Color.White, 0.0f, Vector2.Zero, Game1.camera.ProjectScale(Vector2.One),
+                        SpriteEffects.None, 1.0f);
+
+                }
+            }
         }
 
         public override bool TestCollisionRect(Vector2 testMin, Vector2 testMax)
         {
-          for (int y = 0; y < mapHeight; y++)
-          {
-            for (int x = 0; x < mapWidth; x++)
+            for (int y = 0; y < mapHeight; y++)
             {
-               int tile = tiles[x, y];
-               if (tile == 0)
-                   continue;
-          
-               Vector2 myMin = new Vector2(x * tileWidth, y * tileHeight);
-               Vector2 myMax = myMin + new Vector2(tileWidth, tileHeight - 3);
-          
-               if ((testMax.X >= myMin.X) && (testMax.Y >= myMin.Y) &&
-                   (testMin.X <= myMax.X) && (testMin.Y <= myMax.Y))
-                   return true;
-            }
-          }  
-          
-          return false;
-        }
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    int tile = tiles[x, y];
+                    if (tile == 0)
+                        continue;
 
-        
+                    Vector2 myMin = new Vector2(x * tileWidth, y * tileHeight);
+                    Vector2 myMax = myMin + new Vector2(tileWidth, tileHeight);
+
+                    if ((testMax.X >= myMin.X) && (testMax.Y >= myMin.Y) &&
+                        (testMin.X <= myMax.X) && (testMin.Y <= myMax.Y - 4))
+                        return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -18,8 +18,6 @@ namespace MetroidVF
             return false;
         }
 
-
-
         //test if must ignore collision against other entity
         public virtual bool IgnoreCollision(Entity other)
         {

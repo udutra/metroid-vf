@@ -100,18 +100,17 @@ namespace MetroidVF
             spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new Camera();
             entities.Add(camera);
-
             entities.Add(map = new Map("Content/Map/map1.tmx", "Map/metro"));
-
-            entities.Add(new Human(new Vector2(1000, 325)));
-
-            //Enemy POS OK!
-            entities.Add(new Enemy1(new Vector2(905, 80)));
-            entities.Add(new Enemy1(new Vector2(1103, 80)));
-
             Human.Content = Content;
             Enemy1.Content = Content;
             Enemy2.Content = Content;
+
+            entities.Add(new Human(new Vector2(1500, 325)));
+
+            //Enemy POS OK!
+            entities.Add(new Enemy2(new Vector2(905, 80)));
+            entities.Add(new Enemy2(new Vector2(1102, 81)));
+                       
 
             textest = Content.Load<Texture2D>("Sprites/enemy1");
         }
