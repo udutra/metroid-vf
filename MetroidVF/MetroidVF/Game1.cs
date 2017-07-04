@@ -14,7 +14,8 @@ namespace MetroidVF
         public static Camera camera = null;
         public static List<Entity> entities = new List<Entity>();
         public static Map map;
-        Texture2D uiTex;             
+        Texture2D uiTex;
+        SpriteFont uiFont;        
 
         enum GameState { Null, MainMenu, Playing };
         GameState currGameState = GameState.MainMenu;
@@ -104,7 +105,7 @@ namespace MetroidVF
             Human.Content = Content;
             Enemy1.Content = Content;
             Enemy2.Content = Content;
-            UI.Content = Content;
+            
 
             entities.Add(new Human(new Vector2(1500, 325)));
 
@@ -119,6 +120,7 @@ namespace MetroidVF
             entities.Add(new Enemy1(new Vector2(1457, 60)));
             entities.Add(new Enemy1(new Vector2(1616, 125)));
             uiTex = Content.Load<Texture2D>("Sprites/UI");
+            uiFont = Content.Load<SpriteFont>("Fonts/Fonts");
 
 
             
@@ -152,6 +154,8 @@ namespace MetroidVF
                 e.Draw(gameTime);
 
             spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
+            string aux = Human.getVida();
+            spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
 
             spriteBatch.End();
 

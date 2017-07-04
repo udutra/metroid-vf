@@ -25,7 +25,7 @@ namespace MetroidVF
         int animTotalFrames;*/
         public bool lookingRight;       
 
-        enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling };
+        enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, Imune };
         PlayerState currPlayerState = PlayerState.Null;
         PlayerState oldJumpState = PlayerState.Null;
 
@@ -149,6 +149,12 @@ namespace MetroidVF
                         }
                     }
                     break;
+
+                case PlayerState.Imune:
+                    {
+                        
+                    }
+                    break;
             }
         }
 
@@ -187,6 +193,12 @@ namespace MetroidVF
                     break;
 
                 case PlayerState.Falling:
+                    {
+
+                    }
+                    break;
+
+                case PlayerState.Imune:
                     {
 
                     }
@@ -399,31 +411,14 @@ namespace MetroidVF
                         }
                     }
                     break;
+
+                case PlayerState.Imune:
+                    {
+
+                    }
+                    break;
             }
-        }       
-
-        /*public void PlayAnim(int frameStart, int frameEnd, float animSpeed)
-        {
-            animFrame = (float)frameStart;
-            this.frameStart = frameStart;
-            this.frameEnd = frameEnd;
-            this.animSpeed = animSpeed;
-
-            animTotalFrames = frameEnd - frameStart + 1;
-        }
-
-        public void UpdateAnim(float dt)
-        {
-            animFrame -= frameStart;
-
-            animFrame += dt * animSpeed;
-
-            animFrame = animFrame % animTotalFrames;
-            if (animFrame < 0f)
-                animFrame += animTotalFrames;
-
-            animFrame += frameStart;
-        }*/
+        }     
 
         public Human(Vector2 initPos) : base(initPos)
         {
@@ -431,12 +426,9 @@ namespace MetroidVF
             spriteSheet = new SpriteSheet(texSamusStart, 14, 2);
 
             EnterPlayerState(PlayerState.Start);
-            
-
+            health = 30;  
         }
-
-        
-
+                
         public override Vector2 GetDir() { return moveDir; }
 
         public static ContentManager Content
@@ -444,8 +436,6 @@ namespace MetroidVF
             protected get { return content; }
             set { content = value; }
         }
-        
-      
 
         public override Texture2D GetSprite()
         {
@@ -551,6 +541,28 @@ namespace MetroidVF
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
+        }
+
+        public override void CollisionDetected(Entity other)
+        {
+            if (other is Enemy2)
+            {
+                
+                    Character c = (Character)other;
+                    this.setHealth(-8);
+                    
+
+                    if (this.getHealth() <= 0)
+                    {
+                        Game1.entities.Remove(this);
+                    }
+                                
+            }
+        }
+
+        public static string getVida()
+        {
+            return "" + health;
         }
     }
 }

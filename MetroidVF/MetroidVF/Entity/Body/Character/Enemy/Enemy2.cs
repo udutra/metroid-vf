@@ -314,11 +314,18 @@ namespace MetroidVF
                 return true;
             }
 
-            if (other is Human)
+            if (other is Enemy2)
             {
                 return true;
             }
+
+            
             return false;
+        }
+
+        public override void CollisionDetected(Entity other)
+        {
+               
         }
 
         public override void Update(GameTime gameTime)

@@ -4,7 +4,7 @@ namespace MetroidVF
 {
     public class Character : Body
     {
-        public float health = 100f;
+        public static float health = 100f;
 
         public float fireRate = 10f; //hz
 
@@ -15,6 +15,16 @@ namespace MetroidVF
         public Character(Vector2 initPos) : base(initPos) { }
 
         public virtual bool WantsToFire() { return false; }
+
+        public void setHealth(float f)
+        {
+            health += f;
+        }
+
+        public float getHealth()
+        {
+            return health;
+        }
 
         public override void Update(GameTime gameTime)
         {
@@ -42,6 +52,7 @@ namespace MetroidVF
 
           //  if (health <= 0.0f)
             //    Game1.entities.Remove(this);
-        }     
+        }   
+        
     }
 }
