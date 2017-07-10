@@ -23,7 +23,9 @@ namespace MetroidVF
         int frameStart;
         int frameEnd;
         int animTotalFrames;*/
-        public bool lookingRight;       
+        public bool lookingRight;
+        /*Texture2D debugRetanguloTex;
+        Vector2 debugRetanguloPos;*/
 
         enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, Imune };
         PlayerState currPlayerState = PlayerState.Null;
@@ -232,10 +234,13 @@ namespace MetroidVF
 
                 case PlayerState.Idle:
                     {
-                        moveDir = Vector2.Zero;
-                        if (KeyState.IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
-                        if (KeyState.IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
-                        if (KeyState.IsKeyDown(Keys.Space)) { EnterPlayerState(PlayerState.Jumping); }
+                          
+                            
+                            moveDir = Vector2.Zero;
+                            if (KeyState.IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
+                            if (KeyState.IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
+                            if (KeyState.IsKeyDown(Keys.Space)) { EnterPlayerState(PlayerState.Jumping); }
+                        
                     }
                     break;
 
@@ -301,14 +306,19 @@ namespace MetroidVF
 
                 case PlayerState.Jumping:
                     {                        
-                        if (timeCounter <= jumpTime)
+                        if (timeCounter <= jumpTime && !IsOnRoof())
                         {                            
-                            if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                            if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                            if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+                                moveDir += Vector2.UnitX;
+                            }
+                            if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+                                moveDir -= Vector2.UnitX;
+                            }
 
                             speed += speed * dt / 1.5f;
                             moveDir.Y += -2.0f;
-                            
+
+
                             if (position.Y + spriteSheet.tex.Width <= bkpPosition.Y - (spriteSheet.tex.Width * 0.6f))
                             {
                                 speed -= speed * dt * 1.5f;                                
@@ -332,10 +342,14 @@ namespace MetroidVF
 
                 case PlayerState.jumpingRight:
                     {                        
-                        if (timeCounter <= jumpTime)
+                        if (timeCounter <= jumpTime && !IsOnRoof())
                         {                            
-                            if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                            if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                            if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+                                moveDir += Vector2.UnitX;
+                            }
+                            if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+                                moveDir -= Vector2.UnitX;
+                            }
 
                             speed += speed * dt / 1.5f;
                             moveDir.Y += -2.0f;
@@ -363,14 +377,21 @@ namespace MetroidVF
 
                 case PlayerState.jumpingLeft:
                     {                        
-                        if (timeCounter <= jumpTime)
+                        if (timeCounter <= jumpTime && !IsOnRoof())
                         {
-                            if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                            if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                            if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+                                moveDir += Vector2.UnitX;
+                                
+                            }
+                            if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+                                moveDir -= Vector2.UnitX;
+                                
+                            }
 
                             speed += speed * dt / 1.5f;
                             moveDir.Y += -2.0f;
                             timeCounter += dt;
+                            
 
                             if (position.Y + spriteSheet.tex.Width <= bkpPosition.Y - (spriteSheet.tex.Width * 1.2f))
                             {
@@ -397,15 +418,22 @@ namespace MetroidVF
                         moveDir = Vector2.Zero;
                         speed += speed * dt / 1.5f;
 
-                        if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX / 2.5f; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX / 2.5f; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+                            moveDir += Vector2.UnitX / 2.5f;
+
+                        }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+                            moveDir -= Vector2.UnitX / 2.5f;
+
+                        }
 
                         if(speed >= 350)
                         {
                             speed = 250;
                         }
-                        
-                        if(IsOnFirmGround())
+
+                        System.Console.WriteLine(IsOnFirmGround());
+                        if (IsOnFirmGround())
                         {
                             EnterPlayerState(PlayerState.Idle);
                         }
@@ -424,9 +452,8 @@ namespace MetroidVF
         {
             texSamusStart = Content.Load<Texture2D>("SpriteSheets/Sheet");
             spriteSheet = new SpriteSheet(texSamusStart, 14, 2);
-
             EnterPlayerState(PlayerState.Start);
-            health = 30;  
+            health = 30;
         }
                 
         public override Vector2 GetDir() { return moveDir; }
@@ -460,26 +487,37 @@ namespace MetroidVF
 
         public bool IsOnFirmGround()
         {
-            Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f + 4);
+            //Vector2 min = new Vector2(position.X - size.X / 2f, position.Y - 1);
+            //Vector2 max = new Vector2(position.X + size.X / 2f, position.Y + 5);
+            //Vector2 max = new Vector2(position.X, position.Y + 32);
+            //Vector2 min = new Vector2(position.X - (size.Y / 2) + 36, position.Y);
+
+            // System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
+
+            Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f - 4);
             Vector2 max = new Vector2(position.X + size.X / 2f + 4, position.Y + size.Y / 2f + 4);
-           // System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
 
             return Game1.map.TestCollisionRect(min, max);
         }
 
         public bool IsOnRoof()
         {
-            Vector2 min = new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f + 4 );
-            Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f - 4);
+            Vector2 min = new Vector2(position.X, position.Y -32);
+            
+            Vector2 max = new Vector2(position.X + (size.Y / 2) -36, position.Y);
+            
 
-             //System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
+
+            //System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
             // System.Console.WriteLine("position.X: " + position.X);
             // System.Console.WriteLine("size.X / 2f: " + ((size.X / 2f)-4));
             // System.Console.WriteLine("position.Y: " + position.Y);
             // System.Console.WriteLine("size.Y / 2f: " + ((size.Y / 2f)-4));
-            //
+            if (Game1.map.TestCollisionRect(min, max))
+            {
+                System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
+            }
             return Game1.map.TestCollisionRect(min, max);
-
         }
 
         public bool IsOnRight()
@@ -530,8 +568,8 @@ namespace MetroidVF
                 {
                     EnterPlayerState(PlayerState.Falling);
                 }
-            }              
-
+            }
+            
 
             base.Update(gameTime);
             Game1.camera.camPos = position;
@@ -560,9 +598,22 @@ namespace MetroidVF
             }
         }
 
-        public static string getVida()
+        public static string GetVida()
         {
             return "" + health;
         }
+
+
+        public override Vector2 GetMin()
+        {
+            return new Vector2(position.X - (size.X / 2) + 13, position.Y - (size.Y / 2) + 10);
+            //return position - size / 2 ;
+        }
+        public override Vector2 GetMax()
+        {
+            return new Vector2(position.X + (size.X / 2) - 13, position.Y + (size.Y / 2) - 4);
+            //return position + size / 2;
+        }
+
     }
 }

@@ -15,8 +15,8 @@ namespace MetroidVF
             position = initPos;
         }      
 
-        public Vector2 GetMin() { return position - size / 2; }
-        public Vector2 GetMax() { return position + size / 2; }
+        public virtual Vector2 GetMin() { return position - size / 2; }
+        public virtual Vector2 GetMax() { return position + size / 2; }
 
         public virtual Vector2 GetDir()
         {
@@ -100,8 +100,9 @@ namespace MetroidVF
             if (size == null)
                 return;
             // size = new Vector2(sprite.Width, sprite.Height);
-           // size = new Vector2(32 -4,32 - 4);
+            // size = new Vector2(32 -4,32 - 4);
 
+            
 
             int spriteWidth = sprite.Width;
             int spriteHeight = sprite.Height;

@@ -154,7 +154,7 @@ namespace MetroidVF
                 e.Draw(gameTime);
 
             spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
-            string aux = Human.getVida();
+            string aux = Human.GetVida();
             spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
 
             spriteBatch.End();

@@ -106,13 +106,21 @@ namespace MetroidVF
                     Vector2 myMin = new Vector2(x * tileWidth, y * tileHeight);
                     Vector2 myMax = myMin + new Vector2(tileWidth, tileHeight);
 
+                    /*System.Console.WriteLine("myMin:   [" + myMin.X + "," + myMin.Y);
+                    System.Console.WriteLine("myMax:   [" + myMax.X + "," + myMax.Y);
+                    System.Console.WriteLine("testMin: [" + testMin.X + "," + testMin.Y);
+                    System.Console.WriteLine("testMax: [" + testMax.X + "," + testMax.Y);*/
+
                     if ((testMax.X >= myMin.X) && (testMax.Y >= myMin.Y) &&
                         (testMin.X <= myMax.X) && (testMin.Y <= myMax.Y - 4))
                         return true;
+                        
                 }
             }
 
             return false;
         }
+
+        
     }
 }
