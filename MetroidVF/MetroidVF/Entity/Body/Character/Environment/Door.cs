@@ -16,7 +16,7 @@ namespace MetroidVF
         int animTotalFrames;
         float timeCounter = 0f;
         public bool doorOpen = false;
-        Texture2D texDoorOpen, texDoorClosed;
+        Texture2D texDoor;
 
         enum DoorState { Open, Closed, Transition }
         DoorState currentDoorState = DoorState.Closed;
@@ -171,22 +171,31 @@ namespace MetroidVF
             animFrame += frameStart;
         }
 
-        public override Rectangle? GetSourceRectangle()
-        {
-            return spriteSheet.GetSourceRectangle((int)spriteSheet.animFrame);
-        }
+       public override Rectangle? GetSourceRectangle()
+       {
+            if (doorOpen == false)
+            {
+                return doorOp.GetSourceRectangle((int)doorOp.animFrame);
+            }
+            return doorClosed.GetSourceRectangle((int)doorClosed.animFrame);
+       }
 
         public override Texture2D GetSprite()
         {
-            return spriteSheet.tex;
+            if(doorOpen==false)
+            {
+                return doorOp.tex;
+            }
+            return doorClosed.tex;
         }
-
+       
         public Door(Vector2 initPos) : base(initPos)
         {
-            //PRECISA CARREGAR O SHEET DA PORTA
-            //texDoor = Content.Load<Texture2D>("SpriteSheets/Door");
-            //spriteSheet = new SpriteSheet(texDoor, 3, 1);
-            //spriteSheet = new SpriteSheet(texDoor, 3, 1);
+           //PRECISA CARREGAR O SHEET DA PORTA
+           texDoor = Content.Load<Texture2D>("SpriteSheets/doorSheet");
+
+           doorOp = new SpriteSheet(texDoor, 3, 1);
+           doorClosed = new SpriteSheet(texDoor, 3, 1);
         }
 
         public static ContentManager Content
