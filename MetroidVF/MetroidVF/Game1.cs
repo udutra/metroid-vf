@@ -111,28 +111,28 @@ namespace MetroidVF
             Door.Content = Content;
             PowerUp.Content = Content;
 
+            //Doors
+            entities.Add(new Door(new Vector2(2395, 207)));
+            entities.Add(new Door(new Vector2(2931, 207)));
+
+            //Samus
             entities.Add(new Human(new Vector2(1032, 305)));
 
-           // entities.Add(new Door(new Vector2(1200, 350)));
-
+            //PowerUP
             entities.Add(new PowerUp(new Vector2(465, 290)));
 
             //Enemy2 POS OK!
             entities.Add(new Enemy2(new Vector2(935, 80)));
             entities.Add(new Enemy2(new Vector2(1132, 81)));
-            entities.Add(new Enemy2(new Vector2(1300, 120)));
-
-
+            entities.Add(new Enemy2(new Vector2(2185, 120)));
 
             //Enemy1 POS OK!
-            entities.Add(new Enemy1(new Vector2(1457, 60)));
-            entities.Add(new Enemy1(new Vector2(1616, 125)));
+            entities.Add(new Enemy1(new Vector2(1487, 60)));
+            entities.Add(new Enemy1(new Vector2(1646, 125)));
+
+            //UI
             uiTex = Content.Load<Texture2D>("Sprites/UI");
             uiFont = Content.Load<SpriteFont>("Fonts/Fonts");
-            
-
-
-
 
         }
         
@@ -169,11 +169,7 @@ namespace MetroidVF
                     string aux = "" + h.GetHealth();
                     spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
                 }
-            }
-                
-
-            
-
+            }   
             spriteBatch.End();
 
 

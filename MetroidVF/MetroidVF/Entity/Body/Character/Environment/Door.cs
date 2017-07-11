@@ -27,6 +27,7 @@ namespace MetroidVF
                 case DoorState.Open:
                     {
                         doorOpen = true;
+                        timeCounter = 0;
                         //Animação Porta Aberta
                         doorOp.PlayAnim(0, 0, 1f);
                     }
@@ -34,22 +35,14 @@ namespace MetroidVF
 
                 case DoorState.Transition:
                     {
-                        
-                        if (doorOpen == true)
-                        {
-                            //Animação Porta Se fechando
-                            doorOp.PlayAnim(0, 2, 3f);
-                        }
-                        else
-                        {
-                            doorClosed.PlayAnim(0, 2, 6f);
-                        }
+                        doorClosed.PlayAnim(1, 1, 1f);
                     }
                     break;
 
                 case DoorState.Closed:
                     {
                         doorOpen = false;
+                        timeCounter = 0;
                         //Animação Porta Fechada
                         doorClosed.PlayAnim(0, 0, 12f);
                     }
@@ -89,17 +82,16 @@ namespace MetroidVF
             {
                 case DoorState.Open:
                     {
-                       //ADICIONAR TRANSIÇÃO DE TELA OU IGNORAR COLISÃO
-                      
-                     // //APOS 5 SEGUNDOS A PORTA SE FECHA
-                     // if (timeCounter <= 5f)
-                     // {
-                     //     timeCounter += dt;
-                     // }
-                     // else
-                     // {
-                     //     EnterDoorState(DoorState.Transition);
-                     // }
+                       //ADICIONAR TRANSIÇÃO DE TELA OU IGNORAR COLISÃO                      
+                      //APOS 5 SEGUNDOS A PORTA SE FECHA
+                      if (timeCounter <= 5f)
+                      {
+                          timeCounter += dt;
+                      }
+                      else
+                      {
+                          EnterDoorState(DoorState.Transition);
+                      }
                     }
                     break;
 
@@ -107,7 +99,7 @@ namespace MetroidVF
                     {
                         if (doorOpen == false)
                         {
-                            if (timeCounter <= 0.3f)
+                            if (timeCounter <= 0.1f)
                             {
                                 timeCounter += dt;
                             }
@@ -116,6 +108,19 @@ namespace MetroidVF
                                 EnterDoorState(DoorState.Open);
                             }
                         }
+
+                        if (doorOpen == true)
+                        {
+                            if (timeCounter <= 0.3f)
+                            {
+                                timeCounter += dt;
+                            }
+                            else
+                            {
+                                EnterDoorState(DoorState.Closed);
+                            }
+                        }
+
                     }
                     break;
 
@@ -133,7 +138,7 @@ namespace MetroidVF
 
         public override Vector2 GetSize()
         {
-            return new Vector2(64, 80);
+            return new Vector2(64, 96);
         }
 
         public override Rectangle? GetSourceRectangle()
@@ -179,13 +184,25 @@ namespace MetroidVF
 
         public override void Update(GameTime gameTime)
         {
-            //doorOp.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
+            doorOp.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
             doorClosed.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             UpdateDoorState(gameTime);
             base.Update(gameTime);
             
-        }     
+        }
+
+        public override bool IgnoreCollision(Entity other)
+        {
+            if (doorOpen == true)
+            {
+                if (other is Human)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }
 }
