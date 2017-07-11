@@ -9,25 +9,21 @@ namespace MetroidVF
     {        
         private static ContentManager content;        
         Vector2 moveDir;
-        Texture2D texSamusStart;
+        Texture2D texSamusStart, texSamusBall;
         KeyboardState KeyState;
         float camZoom = 1.0f;
         float timeCounter = 0f;
         float jumpTime = 0.8f;
         Vector2 bkpPosition;
         GameTime gameTimeLeave;
-        SpriteSheet spriteSheet;
-        /*SpriteSheet spriteBolinha;
-        float animFrame = 0f;
-        float animSpeed = 0f;
-        int frameStart;
-        int frameEnd;
-        int animTotalFrames;*/
+        SpriteSheet spriteSheet, ballMove;     
         public bool lookingRight;
-        /*Texture2D debugRetanguloTex;
-        Vector2 debugRetanguloPos;*/
+        public bool hasPowerUp = false;
+        public bool isBall = false;
 
-        enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, Imune };
+        
+
+        enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, Imune };
         PlayerState currPlayerState = PlayerState.Null;
         PlayerState oldJumpState = PlayerState.Null;
 
@@ -107,7 +103,7 @@ namespace MetroidVF
                         bkpPosition = position;
 
                         //Animation Jumping Right
-                        spriteSheet.PlayAnim(10, 13, 15f);
+                        spriteSheet.PlayAnim(10, 13, 20f);
                     }
                     break;
 
@@ -118,7 +114,7 @@ namespace MetroidVF
                         bkpPosition = position;
 
                         //Animation Jumping Left
-                        spriteSheet.PlayAnim(14, 17, 12f);
+                        spriteSheet.PlayAnim(14, 17, 20f);
                     }
                     break;
 
@@ -149,6 +145,13 @@ namespace MetroidVF
                                 spriteSheet.PlayAnim(14, 17, 12f);
                             }
                         }
+                    }
+                    break;
+
+                case PlayerState.TurnBall:
+                    {
+                        isBall = true;
+                        ballMove.PlayAnim(0, 3, 15f);
                     }
                     break;
 
@@ -200,6 +203,12 @@ namespace MetroidVF
                     }
                     break;
 
+                case PlayerState.TurnBall:
+                    {
+                        isBall = false;
+                    }
+                    break;
+
                 case PlayerState.Imune:
                     {
 
@@ -240,7 +249,15 @@ namespace MetroidVF
                             if (KeyState.IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
                             if (KeyState.IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
                             if (KeyState.IsKeyDown(Keys.Space)) { EnterPlayerState(PlayerState.Jumping); }
-                        
+
+                            if (KeyState.IsKeyDown(Keys.Down))
+                               {
+                                 if (hasPowerUp == true)
+                                 {
+                                     EnterPlayerState(PlayerState.TurnBall);
+                                 }
+                               }
+
                     }
                     break;
 
@@ -444,6 +461,35 @@ namespace MetroidVF
                     }
                     break;
 
+                case PlayerState.TurnBall:
+                    {
+                        moveDir = Vector2.Zero;
+                        if (KeyState.IsKeyDown(Keys.Right))
+                        {
+                            lookingRight = true;
+                            moveDir += Vector2.UnitX;
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Left))
+                        {
+                            lookingRight = false;
+                            moveDir -= Vector2.UnitX;
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Up))
+                        {
+                            position.Y -= 32f;
+                            EnterPlayerState(PlayerState.Idle);
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Space))
+                        {
+                            position.Y -= 32f;
+                            EnterPlayerState(PlayerState.Idle);
+                        }
+                    }
+                    break;
+
                 case PlayerState.Imune:
                     {
 
@@ -455,7 +501,9 @@ namespace MetroidVF
         public Human(Vector2 initPos) : base(initPos)
         {
             texSamusStart = Content.Load<Texture2D>("SpriteSheets/Sheet");
+            texSamusBall = Content.Load<Texture2D>("SpriteSheets/ballSheet");
             spriteSheet = new SpriteSheet(texSamusStart, 14, 2);
+            ballMove = new SpriteSheet(texSamusBall, 4, 1);
             EnterPlayerState(PlayerState.Start);
             health = 30;
             Game1.bulletDir = true;
@@ -471,17 +519,38 @@ namespace MetroidVF
 
         public override Texture2D GetSprite()
         {
-            return spriteSheet.tex;
+            if (isBall == true)
+            {
+                return ballMove.tex;
+            }
+            else
+            {
+                return spriteSheet.tex;
+            }
         }
 
         public override Vector2 GetSize()
         {
-            return new Vector2(32, 76);
+            if (isBall == true)
+            {
+                return new Vector2(32, 32);
+            }
+            else
+            {
+                return new Vector2(32, 76);
+            }            
         }
 
         public override Rectangle? GetSourceRectangle()
         {
-            return spriteSheet.GetSourceRectangle((int)spriteSheet.animFrame);
+            if (isBall == true)
+            {
+                return ballMove.GetSourceRectangle((int)ballMove.animFrame);
+            }
+            else
+            {
+                return spriteSheet.GetSourceRectangle((int)spriteSheet.animFrame);
+            }
         }
 
         private void AffectWithGravity()
@@ -501,6 +570,8 @@ namespace MetroidVF
 
             Vector2 min = new Vector2(position.X - size.X / 2f +14 , position.Y + size.Y / 2f - 4);
             Vector2 max = new Vector2(position.X + size.X / 2f -14, position.Y + size.Y / 2f + 4);
+         //  System.Console.WriteLine("position.y: " + position.Y);
+         //  System.Console.WriteLine("position.x: " + position.X);
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -512,16 +583,6 @@ namespace MetroidVF
             Vector2 max = new Vector2(position.X + (size.Y / 2) -36, position.Y);
             
 
-
-            //System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
-            // System.Console.WriteLine("position.X: " + position.X);
-            // System.Console.WriteLine("size.X / 2f: " + ((size.X / 2f)-4));
-            // System.Console.WriteLine("position.Y: " + position.Y);
-            // System.Console.WriteLine("size.Y / 2f: " + ((size.Y / 2f)-4));
-            if (Game1.map.TestCollisionRect(min, max))
-            {
-                System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
-            }
             return Game1.map.TestCollisionRect(min, max);
         }
 
@@ -559,6 +620,9 @@ namespace MetroidVF
         {
             KeyState = Keyboard.GetState();
             spriteSheet.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
+            ballMove.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+
             UpdatePlayerState(gameTime);
             
             
@@ -591,13 +655,18 @@ namespace MetroidVF
             if (other is Enemy2)
             {
                 this.SetHealth(-8);
-                    
 
                 if (this.GetHealth() <= 0)
                 {
                     Game1.entities.Remove(this);
-                }
-                                
+                }               
+            }
+
+            if (other is PowerUp)
+            {
+                hasPowerUp = true;
+                PowerUp p = (PowerUp)other;
+                Game1.entities.Remove(p);
             }
         }
 

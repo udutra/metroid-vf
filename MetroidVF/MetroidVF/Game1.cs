@@ -109,10 +109,13 @@ namespace MetroidVF
             Enemy2.Content = Content;
             Bullet.Content = Content;
             Door.Content = Content;
+            PowerUp.Content = Content;
 
             entities.Add(new Human(new Vector2(1000, 305)));
 
             entities.Add(new Door(new Vector2(1200, 350)));
+
+            entities.Add(new PowerUp(new Vector2(435, 290)));
 
             //Enemy2 POS OK!
             entities.Add(new Enemy2(new Vector2(905, 80)));
