@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using System;
 
 namespace MetroidVF
 {
@@ -190,8 +191,27 @@ namespace MetroidVF
                             //Console.WriteLine("COLISÃO COM O HUMANO");
                             if (!IsOnFirmGround())
                             {
-                                moveDir += Vector2.UnitY;
-                                speed = 300;
+                                moveDir = Vector2.Zero;
+
+                                speed = 180;
+
+                                Human nearestBody = null;
+                                float nearestDist = 9999.9f;
+
+                                Human testBody = Game1.hum;
+
+                                float testDist = Vector2.Distance(this.position, testBody.position) - (float) testBody.GetDiagonal() *100;
+
+                                if ((testDist <= GetDiagonal() *100) && (testDist < nearestDist))
+                                {
+                                    nearestDist = testDist;
+                                    nearestBody = testBody;
+                                }
+
+                                if (nearestBody != null)
+                                {
+                                    moveDir += nearestBody.position - position;
+                                }
                             }
                             else
                             {
@@ -365,5 +385,7 @@ namespace MetroidVF
             else
                 return false;
         }
+
+        
     }
 }

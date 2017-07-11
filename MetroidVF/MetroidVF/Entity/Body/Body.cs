@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace MetroidVF
 {
@@ -141,7 +142,15 @@ namespace MetroidVF
             else
                 return false;
         }
-
+        public double GetDiagonal()
+        {
+            float b, a;
+            double d;
+            b = size.X / 2;
+            a = size.Y / 2;
+            d = Math.Sqrt((b * b) + (a * a));
+            return d;
+        }
 
     }
 }
