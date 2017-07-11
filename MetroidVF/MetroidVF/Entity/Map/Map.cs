@@ -52,6 +52,7 @@ namespace MetroidVF
                         tiles[x, y] = int.Parse(cells[i]);
                     }
                 }
+                
 
                 //Debug.Print("Data: " + data);
 

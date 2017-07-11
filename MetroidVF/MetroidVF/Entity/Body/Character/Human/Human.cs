@@ -312,21 +312,19 @@ namespace MetroidVF
 
 
                 case PlayerState.Idle:
-                    {
-                          
-                            
-                            moveDir = Vector2.Zero;
-                            if (KeyState.IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
-                            if (KeyState.IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
-                            if (KeyState.IsKeyDown(Keys.Space)) { EnterPlayerState(PlayerState.Jumping); }
-                            if (KeyState.IsKeyDown(Keys.Up)) { EnterPlayerState(PlayerState.LookingUP); }
-                            if (KeyState.IsKeyDown(Keys.Down))
-                            {
-                              if (hasPowerUp == true)
-                              {
-                                  EnterPlayerState(PlayerState.TurnBall);
-                              }
-                            }
+                    {  
+                        moveDir = Vector2.Zero;
+                        if (KeyState.IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
+                        if (KeyState.IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
+                        if (KeyState.IsKeyDown(Keys.Space)) { EnterPlayerState(PlayerState.Jumping); }
+                        if (KeyState.IsKeyDown(Keys.Up)) { EnterPlayerState(PlayerState.LookingUP); }
+                        if (KeyState.IsKeyDown(Keys.Down))
+                        {
+                          if (hasPowerUp == true)
+                          {
+                              EnterPlayerState(PlayerState.TurnBall);
+                          }
+                        }
                     }
                     break;
 

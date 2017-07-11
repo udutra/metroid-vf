@@ -148,11 +148,11 @@ namespace MetroidVF
                 case EnemyState.Up:
                     {
                         moveDir = Vector2.Zero;
-                      // if(IsOnRight() && IsOnRoof())
-                      // {
-                      //     rotation -= 1.57f;
-                      //     currentEnState = EnemyState.Left;
-                      // }
+                        if(IsOnRight() && IsOnRoof())
+                        {
+                            rotation -= 1.57f;
+                            currentEnState = EnemyState.Left;
+                        }
                         if (IsOnRight())
                         {
                             moveDir -= Vector2.UnitY;

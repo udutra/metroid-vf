@@ -103,7 +103,7 @@ namespace MetroidVF
             spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new Camera();
             entities.Add(camera);
-            entities.Add(map = new Map("Content/Map/map1.tmx", "Map/metro"));
+            entities.Add(map = new Map("Content/Map/map.tmx", "Map/metro"));
             Human.Content = Content;
             Enemy1.Content = Content;
             Enemy2.Content = Content;
@@ -111,16 +111,16 @@ namespace MetroidVF
             Door.Content = Content;
             PowerUp.Content = Content;
 
-            entities.Add(new Human(new Vector2(1000, 305)));
+            entities.Add(new Human(new Vector2(1032, 305)));
 
-            entities.Add(new Door(new Vector2(1200, 350)));
+           // entities.Add(new Door(new Vector2(1200, 350)));
 
-            entities.Add(new PowerUp(new Vector2(435, 290)));
+            entities.Add(new PowerUp(new Vector2(465, 290)));
 
             //Enemy2 POS OK!
-            entities.Add(new Enemy2(new Vector2(905, 80)));
-            entities.Add(new Enemy2(new Vector2(1102, 81)));
-           // entities.Add(new Enemy2(new Vector2(1300, 120)));
+            entities.Add(new Enemy2(new Vector2(935, 80)));
+            entities.Add(new Enemy2(new Vector2(1132, 81)));
+            entities.Add(new Enemy2(new Vector2(1300, 120)));
 
 
 

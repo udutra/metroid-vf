@@ -25,9 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/samus.png
 
-#begin Map/map.tmx
-/copy:Map/map.tmx
-
 #begin Map/metroidset.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -217,4 +214,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpriteSheets/samusSheet.png
+
+#begin Map/map.tmx
+/copy:Map/map.tmx
 
