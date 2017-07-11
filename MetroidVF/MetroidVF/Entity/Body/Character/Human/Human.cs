@@ -436,7 +436,7 @@ namespace MetroidVF
                             speed = 250;
                         }
 
-                        System.Console.WriteLine(IsOnFirmGround());
+                        //System.Console.WriteLine(IsOnFirmGround());
                         if (IsOnFirmGround())
                         {
                             EnterPlayerState(PlayerState.Idle);

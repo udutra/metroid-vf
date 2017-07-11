@@ -29,7 +29,7 @@ namespace MetroidVF
             myShooter = shooter;
             dir = initDir;
             speed *= 2;
-            size /= 5.5f;
+            size = new Vector2(32,32);
         }
 
         public static ContentManager Content
@@ -51,7 +51,7 @@ namespace MetroidVF
 
         public override void CollisionDetected(Entity other)
         {
-            /*if (other is Enemy2)
+            if (other is Enemy2)
             {
                 Character c = (Character)other;
                 c.SetHealth(damage);
@@ -61,7 +61,7 @@ namespace MetroidVF
             if (other is Map)
             {
                 Game1.entities.Remove(this);
-            }*/
+            }
 
         }
 
@@ -106,5 +106,11 @@ namespace MetroidVF
             }
             base.Update(gameTime);
         }
+
+        public override Vector2 GetSize()
+        {
+            return new Vector2(7, 10);
+        }
+
     }
 }

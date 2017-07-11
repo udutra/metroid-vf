@@ -108,7 +108,6 @@ namespace MetroidVF
             Enemy1.Content = Content;
             Enemy2.Content = Content;
             Bullet.Content = Content;
-            
 
             entities.Add(new Human(new Vector2(1000, 305)));
 
@@ -124,10 +123,11 @@ namespace MetroidVF
             entities.Add(new Enemy1(new Vector2(1616, 125)));
             uiTex = Content.Load<Texture2D>("Sprites/UI");
             uiFont = Content.Load<SpriteFont>("Fonts/Fonts");
+            
 
 
-            
-            
+
+
         }
         
         protected override void UnloadContent()

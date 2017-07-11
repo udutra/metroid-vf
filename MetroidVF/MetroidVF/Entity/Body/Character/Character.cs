@@ -95,7 +95,7 @@ namespace MetroidVF
                     {
                         novoPos = new Vector2(position.X + 4f, position.Y - 16f);
                     }
-                    Game1.entities.Add(new Bullet(this, new Vector2(1000,325), shootDir));
+                    Game1.entities.Add(new Bullet(this, position, shootDir));
 
                 }
             }
