@@ -19,9 +19,9 @@ namespace MetroidVF
         SpriteSheet spriteSheet, ballMove;     
         public bool lookingRight;
         public bool hasPowerUp = false;
-        public bool isBall = false;       
+        public bool isBall = false;
+        public static float health;
 
-        
 
         enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
         PlayerState currPlayerState = PlayerState.Null;
@@ -901,14 +901,14 @@ namespace MetroidVF
             }
         }
 
-        public override float GetHealth()
+        public float GetHealth()
         {
-            return base.GetHealth();
+            return health;
         }
 
-        public override void SetHealth(float f)
+        public void SetHealth(float f)
         {
-            base.SetHealth(f);
+            health += f;
         }
 
 

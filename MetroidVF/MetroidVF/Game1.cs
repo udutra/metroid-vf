@@ -18,6 +18,7 @@ namespace MetroidVF
         SpriteFont uiFont;
         public static bool bulletDir;
         public static bool BulletUP;
+        public static Human hum;
 
         enum GameState { Null, MainMenu, Playing };
         GameState currGameState = GameState.MainMenu;
@@ -86,13 +87,12 @@ namespace MetroidVF
                         foreach (Entity e in entities)
                         {
                             e.Draw(gameTime);
-                            if (e is Human)
-                            {
-                                Human h = (Human)e;
-                                spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
-                                string aux = "" + h.GetHealth();
-                                spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
-                            }
+
+                            spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
+                            string aux = "" + hum.GetHealth();
+                            spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
+
+
                         }
                     }
                     break;
@@ -134,12 +134,15 @@ namespace MetroidVF
             Door.Content = Content;
             PowerUp.Content = Content;
 
+           
+
+            //Samus
+            hum = new Human(new Vector2(1032, 305));
+            entities.Add(hum);
+
             //Doors
             entities.Add(new Door(new Vector2(2395, 207)));
             entities.Add(new Door(new Vector2(2931, 207)));
-
-            //Samus
-            entities.Add(new Human(new Vector2(1032, 305)));
 
             //PowerUP
             entities.Add(new PowerUp(new Vector2(465, 290)));
@@ -150,7 +153,7 @@ namespace MetroidVF
             entities.Add(new Enemy2(new Vector2(2185, 120)));
 
             //Enemy1 POS OK!
-            entities.Add(new Enemy1(new Vector2(1487, 60)));
+            entities.Add(new Enemy1(new Vector2(1490, 65)));
             entities.Add(new Enemy1(new Vector2(1646, 125)));
 
             //UI

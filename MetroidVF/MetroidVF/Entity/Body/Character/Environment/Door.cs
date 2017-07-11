@@ -15,6 +15,7 @@ namespace MetroidVF
 
         enum DoorState { Open, Closed, Transition }
         DoorState currentDoorState = DoorState.Closed;
+        public float health;
 
         void EnterDoorState(DoorState newState)
         {
@@ -56,7 +57,7 @@ namespace MetroidVF
             {
                 case DoorState.Open:
                     {
-                        health = 100;
+                        health = 50;
                     }
                     break;
 
@@ -167,7 +168,7 @@ namespace MetroidVF
             
            doorOp = new SpriteSheet(texDoorOpen, 3, 1);
            doorClosed = new SpriteSheet(texDoorClose, 3, 1);
-
+            health = 50;
             EnterDoorState(DoorState.Closed);
         }
 
@@ -177,9 +178,9 @@ namespace MetroidVF
             set { content = value; }
         }
 
-        public override void SetHealth(float f)
+        public void SetHealth(float f)
         {
-            base.SetHealth(f);
+            health += f;
         }
 
         public override void Update(GameTime gameTime)

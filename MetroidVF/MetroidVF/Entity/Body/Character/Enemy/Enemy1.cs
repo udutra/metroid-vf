@@ -100,7 +100,7 @@ namespace MetroidVF
             {
                 case EnemyState.Right:
                     {
-                        moveDir = Vector2.Zero;
+                        /*moveDir = Vector2.Zero;
 
                         if (IsOnFirmGround() && IsOnRight())
                         {
@@ -116,13 +116,15 @@ namespace MetroidVF
                         {
                             rotation += 1.57f;
                             currentEnState = EnemyState.Down;
-                        }
+                        }*/
+
+
                     }
                     break;
 
                 case EnemyState.Left:
                     {
-                        moveDir = Vector2.Zero;
+                        /*moveDir = Vector2.Zero;
 
                         if (IsOnRoof())
                         {
@@ -132,13 +134,13 @@ namespace MetroidVF
                         {
                             rotation += 1.57f;
                             currentEnState = EnemyState.Up;
-                        }
+                        }*/
                     }
                     break;
 
                 case EnemyState.Up:
                     {
-                        moveDir = Vector2.Zero;
+                        /*moveDir = Vector2.Zero;
 
                         if (IsOnRight())
                         {
@@ -148,13 +150,13 @@ namespace MetroidVF
                         {
                             rotation += 1.57f;
                             currentEnState = EnemyState.Right;
-                        }
+                        }*/
                     }
                     break;
 
                 case EnemyState.Down:
                     {
-                        moveDir = Vector2.Zero;
+                        /*moveDir = Vector2.Zero;
 
                         if (IsOnLeft() && IsOnFirmGround())
                         {
@@ -170,22 +172,35 @@ namespace MetroidVF
                         {
                             rotation += 1.57f;
                             currentEnState = EnemyState.Left;
-                        }
+                        }*/
                     }
                     break;
 
                 case EnemyState.Stop:
                     {
-                       // moveDir = Vector2.Zero;
-                       // if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                       // if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
-                       // if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
-                       // if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
-                       
+                        // moveDir = Vector2.Zero;
+                        // if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
+                        // if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
+                        // if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
+                        // if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
 
-                        if (IsOnRoof())
+
+                        if (ColisaoComHumano())
                         {
-                           // currentEnState = EnemyState.Right;
+                            //Console.WriteLine("COLISÃO COM O HUMANO");
+                            if (!IsOnFirmGround())
+                            {
+                                moveDir += Vector2.UnitY;
+                                speed = 300;
+                            }
+                            else
+                            {
+                                //Verificar se colidiu com humano
+                                //Se não explode
+                            }
+                        }
+                        {
+                            // currentEnState = EnemyState.Right;
                         }
                     }
                     break;
@@ -217,11 +232,13 @@ namespace MetroidVF
 
         public Enemy1(Vector2 initPos) : base(initPos)
         {
-            speed /= 2f;            
+            speed /= 2f;
             teste = Content.Load<Texture2D>("SpriteSheets/enemy1Sheet");
             spriteSheet = new SpriteSheet(teste, 2, 1);
 
             PlayAnim(0, 1, 5.0f);
+
+
         }
 
         public override Vector2 GetDir()
@@ -265,9 +282,10 @@ namespace MetroidVF
         {
             Vector2 min = new Vector2(position.X - size.X / 2f - 4, position.Y - size.Y / 2f - 4);
             Vector2 max = new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f);
-          // System.Console.WriteLine("position.X: " + position.X);
-          // System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
-          // System.Console.WriteLine("position.Y: " + position.Y);
+
+            // System.Console.WriteLine("position.X: " + position.X);
+            // System.Console.WriteLine("RETORNO TETO: " + Game1.map.TestCollisionRect(min, max));
+            // System.Console.WriteLine("position.Y: " + position.Y);
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -315,6 +333,37 @@ namespace MetroidVF
             UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
             UpdateEnemyState(gameTime);
             base.Update(gameTime);
+        }
+
+        public override Vector2 GetMin()
+        {
+            return position - size / 2;
+        }
+        public override Vector2 GetMax()
+        {
+            return position + size / 2;
+        }
+
+        public bool ColisaoComHumano()
+        {
+            Vector2 min = Game1.hum.GetMin();
+            Vector2 max = Game1.hum.GetMax();
+
+
+            return TestCollisionHuman(min, max);
+        }
+
+        public bool TestCollisionHuman(Vector2 testMin, Vector2 testMax)
+        {
+            Vector2 myMin = new Vector2(position.X - size.X / 2f - 100, position.Y + size.Y / 2f - 4);
+            Vector2 myMax = new Vector2(position.X + size.X / 2f + 100, position.Y + size.Y / 2f + 300);
+
+            //test collision between my rectangle and other's rectangle
+            if ((testMax.X >= myMin.X) && (testMax.Y >= myMin.Y) &&
+                (testMin.X <= myMax.X) && (testMin.Y <= myMax.Y))
+                return true;
+            else
+                return false;
         }
     }
 }

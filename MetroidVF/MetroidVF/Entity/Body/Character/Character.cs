@@ -4,7 +4,7 @@ namespace MetroidVF
 {
     public class Character : Body
     {
-        public static float health = 100f;
+        //public static float health = 100f;
 
         public float fireRate = 10f; //hz
 
@@ -16,7 +16,7 @@ namespace MetroidVF
 
         public virtual bool WantsToFire() { return false; }
 
-        public virtual void SetHealth(float f)
+        /*public virtual void SetHealth(float f)
         {
             health += f;
         }
@@ -24,7 +24,7 @@ namespace MetroidVF
         public virtual float GetHealth()
         {
             return health;
-        }
+        }*/
 
         public override void Update(GameTime gameTime)
         {
