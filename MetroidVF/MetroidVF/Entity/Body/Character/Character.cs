@@ -16,12 +16,12 @@ namespace MetroidVF
 
         public virtual bool WantsToFire() { return false; }
 
-        public void SetHealth(float f)
+        public virtual void SetHealth(float f)
         {
             health += f;
         }
 
-        public float GetHealth()
+        public virtual float GetHealth()
         {
             return health;
         }

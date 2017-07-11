@@ -108,8 +108,11 @@ namespace MetroidVF
             Enemy1.Content = Content;
             Enemy2.Content = Content;
             Bullet.Content = Content;
+            Door.Content = Content;
 
             entities.Add(new Human(new Vector2(1000, 305)));
+
+            entities.Add(new Door(new Vector2(1200, 350)));
 
             //Enemy2 POS OK!
             entities.Add(new Enemy2(new Vector2(905, 80)));
@@ -154,11 +157,19 @@ namespace MetroidVF
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             foreach (Entity e in entities)
+            {
                 e.Draw(gameTime);
+                if (e is Human)
+                {
+                    Human h = (Human)e;
+                    spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
+                    string aux = "" + h.GetHealth();
+                    spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
+                }
+            }
+                
 
-            spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
-            string aux = Human.GetVida();
-            spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
+            
 
             spriteBatch.End();
 

@@ -93,6 +93,10 @@ namespace MetroidVF
                     break;
             }
         }
+        public override void SetHealth(float f)
+        {
+            base.SetHealth(f);
+        }
 
         void UpdateEnemyState(GameTime gameTime)
         {

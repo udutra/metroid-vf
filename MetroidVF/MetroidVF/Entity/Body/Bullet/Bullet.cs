@@ -53,9 +53,15 @@ namespace MetroidVF
         {
             if (other is Enemy2)
             {
-                Character c = (Character)other;
+                Enemy2 c = (Enemy2)other;
                 c.SetHealth(damage);
                 Game1.entities.Remove(this);
+            }
+
+            if (other is Door)
+            {
+                Door d = (Door)other;
+                d.SetHealth(damage);               
             }
 
             if (other is Map)

@@ -601,13 +601,16 @@ namespace MetroidVF
             }
         }
 
-        public static string GetVida()
+        public override float GetHealth()
         {
-            return "" + health;
+            return base.GetHealth();
         }
 
+        public override void SetHealth(float f)
+        {
+            base.SetHealth(f);
+        }
 
-        
 
         public override bool WantsToFire()
         {
