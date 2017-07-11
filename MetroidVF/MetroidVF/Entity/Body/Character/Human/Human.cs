@@ -19,11 +19,11 @@ namespace MetroidVF
         SpriteSheet spriteSheet, ballMove;     
         public bool lookingRight;
         public bool hasPowerUp = false;
-        public bool isBall = false;
+        public bool isBall = false;       
 
         
 
-        enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, Imune };
+        enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
         PlayerState currPlayerState = PlayerState.Null;
         PlayerState oldJumpState = PlayerState.Null;
 
@@ -55,7 +55,7 @@ namespace MetroidVF
                         }
                         else
                         {
-                            spriteSheet.PlayAnim(23, 23, 1f);
+                            spriteSheet.PlayAnim(39, 39, 1f);
                         }
                     }
                     break;
@@ -65,7 +65,8 @@ namespace MetroidVF
                         speed = 200;
                         lookingRight = true;
                         //Animation Right
-                        spriteSheet.PlayAnim(6, 8, 12f);                        
+                        spriteSheet.PlayAnim(6, 8, 12f);
+                        
                     }
                     break;
 
@@ -74,7 +75,8 @@ namespace MetroidVF
                         speed = 200;
                         lookingRight = false;
                         //Animation Left
-                        spriteSheet.PlayAnim(19, 21, 12f);
+                        spriteSheet.PlayAnim(35, 37, 12f);
+                        
                     }
                     break;
 
@@ -91,7 +93,7 @@ namespace MetroidVF
                         }
                         else
                         {
-                            spriteSheet.PlayAnim(18, 18, 1f);
+                            spriteSheet.PlayAnim(34, 34, 1f);
                         }
                     }
                     break;
@@ -114,7 +116,7 @@ namespace MetroidVF
                         bkpPosition = position;
 
                         //Animation Jumping Left
-                        spriteSheet.PlayAnim(14, 17, 20f);
+                        spriteSheet.PlayAnim(30, 33, 20f);
                     }
                     break;
 
@@ -129,7 +131,7 @@ namespace MetroidVF
                             }
                             else
                             {
-                                spriteSheet.PlayAnim(18, 18, 1f);
+                                spriteSheet.PlayAnim(34, 34, 1f);
                             }
                         }
 
@@ -142,9 +144,9 @@ namespace MetroidVF
                             }
                             else
                             {
-                                spriteSheet.PlayAnim(14, 17, 12f);
+                                spriteSheet.PlayAnim(30, 33, 20f);
                             }
-                        }
+                        }                       
                     }
                     break;
 
@@ -152,6 +154,44 @@ namespace MetroidVF
                     {
                         isBall = true;
                         ballMove.PlayAnim(0, 3, 15f);
+                    }
+                    break;
+
+                case PlayerState.LookingUP:
+                    {
+                        if (lookingRight == true)
+                        {
+                            //Animation Idle
+                            spriteSheet.PlayAnim(5, 5, 1f);
+                        }
+                        else
+                        {
+                            spriteSheet.PlayAnim(38, 38, 1f);
+                        }
+                    }
+                    break;
+
+                case PlayerState.LookingRight:
+                    {
+                        spriteSheet.PlayAnim(18, 20, 12f);
+                    }
+                    break;
+
+                case PlayerState.LookingLeft:
+                    {
+                        spriteSheet.PlayAnim(23, 25, 12f);
+                    }
+                    break;
+
+                case PlayerState.RunRightShoot:
+                    {
+                        spriteSheet.PlayAnim(14, 16, 12f);
+                    }
+                    break;
+
+                case PlayerState.RunLeftShoot:
+                    {
+                        spriteSheet.PlayAnim(27, 29, 12f);
                     }
                     break;
 
@@ -199,13 +239,43 @@ namespace MetroidVF
 
                 case PlayerState.Falling:
                     {
-
+                        oldJumpState = PlayerState.Null ;
                     }
                     break;
 
                 case PlayerState.TurnBall:
                     {
                         isBall = false;
+                    }
+                    break;
+
+                case PlayerState.LookingUP:
+                    {
+
+                    }
+                    break;
+
+                case PlayerState.LookingRight:
+                    {
+
+                    }
+                    break;
+
+                case PlayerState.LookingLeft:
+                    {
+
+                    }
+                    break;
+
+                case PlayerState.RunRightShoot:
+                    {
+
+                    }
+                    break;
+
+                case PlayerState.RunLeftShoot:
+                    {
+
                     }
                     break;
 
@@ -249,15 +319,14 @@ namespace MetroidVF
                             if (KeyState.IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
                             if (KeyState.IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
                             if (KeyState.IsKeyDown(Keys.Space)) { EnterPlayerState(PlayerState.Jumping); }
-
+                            if (KeyState.IsKeyDown(Keys.Up)) { EnterPlayerState(PlayerState.LookingUP); }
                             if (KeyState.IsKeyDown(Keys.Down))
-                               {
-                                 if (hasPowerUp == true)
-                                 {
-                                     EnterPlayerState(PlayerState.TurnBall);
-                                 }
-                               }
-
+                            {
+                              if (hasPowerUp == true)
+                              {
+                                  EnterPlayerState(PlayerState.TurnBall);
+                              }
+                            }
                     }
                     break;
 
@@ -270,6 +339,16 @@ namespace MetroidVF
                         if (KeyState.IsKeyDown(Keys.Right))
                         {
                             moveDir += Vector2.UnitX;
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Right) && KeyState.IsKeyDown(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.LookingRight);
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Right) && KeyState.IsKeyDown(Keys.LeftControl))
+                        {
+                            EnterPlayerState(PlayerState.RunRightShoot);
                         }
 
                         if (KeyState.IsKeyDown(Keys.Left))
@@ -309,6 +388,16 @@ namespace MetroidVF
                             EnterPlayerState(PlayerState.walkingRight);
                         }
 
+                        if (KeyState.IsKeyDown(Keys.Left) && KeyState.IsKeyDown(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.LookingLeft);
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Left) && KeyState.IsKeyDown(Keys.LeftControl))
+                        {
+                            EnterPlayerState(PlayerState.RunLeftShoot);
+                        }
+
                         if (KeyState.IsKeyDown(Keys.Space))
                         {
                             EnterPlayerState(PlayerState.jumpingLeft);
@@ -334,6 +423,11 @@ namespace MetroidVF
                             }
                             if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
                                 moveDir -= Vector2.UnitX;
+                            }
+
+                            if (KeyState.IsKeyUp(Keys.Space))
+                            {
+                                EnterPlayerState(PlayerState.Falling);
                             }
 
                             speed += speed * dt / 1.5f;
@@ -490,6 +584,145 @@ namespace MetroidVF
                     }
                     break;
 
+                case PlayerState.LookingUP:
+                    {
+                        moveDir = Vector2.Zero;
+                        if (KeyState.IsKeyDown(Keys.Right) && KeyState.IsKeyDown(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.LookingRight);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.Idle);
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Space))
+                        {
+                            EnterPlayerState(PlayerState.Jumping);
+                        }
+                    }
+                    break;
+
+                case PlayerState.LookingRight:
+                    {
+                        moveDir = Vector2.Zero;
+                        if (KeyState.IsKeyDown(Keys.Right))
+                        {
+                            lookingRight = true;
+                            moveDir += Vector2.UnitX;
+                        }
+                        if (KeyState.IsKeyDown(Keys.Left))
+                        {
+                            lookingRight = false;
+                            EnterPlayerState(PlayerState.LookingLeft);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.Idle);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.Right))
+                        {
+                            EnterPlayerState(PlayerState.LookingUP);
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Space))
+                        {
+                            EnterPlayerState(PlayerState.jumpingRight);
+                        }
+                    }
+                    break;
+
+                case PlayerState.LookingLeft:
+                    {
+                        moveDir = Vector2.Zero;
+                        if (KeyState.IsKeyDown(Keys.Left))
+                        {
+                            lookingRight = false;
+                            moveDir -= Vector2.UnitX;
+                        }
+                        if (KeyState.IsKeyDown(Keys.Right))
+                        {
+                            lookingRight = true;
+                            EnterPlayerState(PlayerState.LookingRight);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.Idle);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.Left))
+                        {
+                            EnterPlayerState(PlayerState.LookingUP);
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Space))
+                        {
+                            EnterPlayerState(PlayerState.jumpingLeft);
+                        }
+
+                    }
+                    break;
+
+                case PlayerState.RunRightShoot:
+                    {
+                        moveDir = Vector2.Zero;
+                        Game1.bulletDir = true;
+                        Game1.BulletUP = false;
+
+                        if (KeyState.IsKeyDown(Keys.Right))
+                        {
+                            moveDir += Vector2.UnitX;
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Space))
+                        {
+                            EnterPlayerState(PlayerState.jumpingRight);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.LeftControl))
+                        {
+                            EnterPlayerState(PlayerState.walkingRight);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.Right))
+                        {
+                            EnterPlayerState(PlayerState.Idle);
+                        }
+                    }
+                    break;
+
+                case PlayerState.RunLeftShoot:
+                    {
+                        moveDir = Vector2.Zero;
+                        Game1.bulletDir = false;
+                        Game1.BulletUP = false;
+
+                        if (KeyState.IsKeyDown(Keys.Left))
+                        {
+                            moveDir -= Vector2.UnitX;
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Space))
+                        {
+                            EnterPlayerState(PlayerState.jumpingLeft);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.LeftControl))
+                        {
+                            EnterPlayerState(PlayerState.walkingLeft);
+                        }
+
+                        if (KeyState.IsKeyUp(Keys.Left))
+                        {
+                            EnterPlayerState(PlayerState.Idle);
+                        }
+                    }
+                    break;
+
                 case PlayerState.Imune:
                     {
 
@@ -500,9 +733,9 @@ namespace MetroidVF
 
         public Human(Vector2 initPos) : base(initPos)
         {
-            texSamusStart = Content.Load<Texture2D>("SpriteSheets/Sheet");
+            texSamusStart = Content.Load<Texture2D>("SpriteSheets/samusSheet");
             texSamusBall = Content.Load<Texture2D>("SpriteSheets/ballSheet");
-            spriteSheet = new SpriteSheet(texSamusStart, 14, 2);
+            spriteSheet = new SpriteSheet(texSamusStart, 22, 2);
             ballMove = new SpriteSheet(texSamusBall, 4, 1);
             EnterPlayerState(PlayerState.Start);
             health = 30;
@@ -633,7 +866,7 @@ namespace MetroidVF
             //Falling without jump
             if(IsOnFirmGround() == false )
             {
-                if(currPlayerState == PlayerState.walkingRight || currPlayerState == PlayerState.walkingLeft)
+                if(currPlayerState == PlayerState.walkingRight || currPlayerState == PlayerState.walkingLeft || currPlayerState == PlayerState.RunRightShoot || currPlayerState == PlayerState.RunLeftShoot)
                 {
                     EnterPlayerState(PlayerState.Falling);
                 }
@@ -683,6 +916,10 @@ namespace MetroidVF
 
         public override bool WantsToFire()
         {
+            if(currPlayerState == PlayerState.jumpingRight || currPlayerState == PlayerState.jumpingLeft || oldJumpState == PlayerState.jumpingRight || oldJumpState == PlayerState.jumpingLeft)
+            {
+                return false;
+            }
             return Keyboard.GetState().IsKeyDown(Keys.LeftControl);
         }
 
