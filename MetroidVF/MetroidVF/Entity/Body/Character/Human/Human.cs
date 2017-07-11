@@ -914,7 +914,7 @@ namespace MetroidVF
 
         public override bool WantsToFire()
         {
-            if(currPlayerState == PlayerState.jumpingRight || currPlayerState == PlayerState.jumpingLeft || oldJumpState == PlayerState.jumpingRight || oldJumpState == PlayerState.jumpingLeft)
+            if(currPlayerState == PlayerState.jumpingRight || currPlayerState == PlayerState.jumpingLeft || oldJumpState == PlayerState.jumpingRight || oldJumpState == PlayerState.jumpingLeft || isBall == true)
             {
                 return false;
             }

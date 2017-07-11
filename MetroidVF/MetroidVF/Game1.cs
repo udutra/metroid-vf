@@ -14,7 +14,7 @@ namespace MetroidVF
         public static Camera camera = null;
         public static List<Entity> entities = new List<Entity>();
         public static Map map;
-        Texture2D uiTex;
+        Texture2D uiTex, texMainMenu;
         SpriteFont uiFont;
         public static bool bulletDir;
         public static bool BulletUP;
@@ -59,11 +59,20 @@ namespace MetroidVF
             switch (currGameState)
             {
                 case GameState.MainMenu:
-                    { }
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                        {
+                            EnterGameState(GameState.Playing);
+                        }
+                    }
                     break;
 
                 case GameState.Playing:
-                    { }
+                    {
+                        List<Entity> tmp = new List<Entity>(entities);
+                        foreach (Entity e in tmp)
+                            e.Update(gameTime);
+                    }
                     break;
             }
         }
@@ -72,12 +81,26 @@ namespace MetroidVF
         {
             switch (currGameState)
             {
-                case GameState.MainMenu:
-                    { }
+                case GameState.Playing:
+                    {
+                        foreach (Entity e in entities)
+                        {
+                            e.Draw(gameTime);
+                            if (e is Human)
+                            {
+                                Human h = (Human)e;
+                                spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
+                                string aux = "" + h.GetHealth();
+                                spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
+                            }
+                        }
+                    }
                     break;
 
-                case GameState.Playing:
-                    { }
+                case GameState.MainMenu:
+                    {
+                        spriteBatch.Draw(texMainMenu, new Vector2(1, 1), Color.White);
+                    }
                     break;
             }
         }
@@ -134,6 +157,11 @@ namespace MetroidVF
             uiTex = Content.Load<Texture2D>("Sprites/UI");
             uiFont = Content.Load<SpriteFont>("Fonts/Fonts");
 
+            //MainMenu
+            texMainMenu = Content.Load<Texture2D>("Sprites/MainMenu");
+
+            EnterGameState(GameState.MainMenu);
+
         }
         
         protected override void UnloadContent()
@@ -146,9 +174,9 @@ namespace MetroidVF
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            List<Entity> tmp = new List<Entity>(entities);
-            foreach (Entity e in tmp)
-                e.Update(gameTime);
+           
+
+            UpdateGameState(gameTime);
 
             base.Update(gameTime);
         }
@@ -159,17 +187,8 @@ namespace MetroidVF
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-            foreach (Entity e in entities)
-            {
-                e.Draw(gameTime);
-                if (e is Human)
-                {
-                    Human h = (Human)e;
-                    spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
-                    string aux = "" + h.GetHealth();
-                    spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
-                }
-            }   
+            DrawGameState(gameTime);
+
             spriteBatch.End();
 
 
