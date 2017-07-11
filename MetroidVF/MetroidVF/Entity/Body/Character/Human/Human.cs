@@ -247,6 +247,8 @@ namespace MetroidVF
                 case PlayerState.walkingRight:
                     {
                         moveDir = Vector2.Zero;
+                        Game1.bulletDir = true;
+                        Game1.BulletUP = false;
 
                         if (KeyState.IsKeyDown(Keys.Right))
                         {
@@ -277,6 +279,8 @@ namespace MetroidVF
                 case PlayerState.walkingLeft:
                     {
                         moveDir = Vector2.Zero;
+                        Game1.BulletUP = false;
+                        Game1.bulletDir = false;
 
                         if (KeyState.IsKeyDown(Keys.Left))
                         {
@@ -454,6 +458,7 @@ namespace MetroidVF
             spriteSheet = new SpriteSheet(texSamusStart, 14, 2);
             EnterPlayerState(PlayerState.Start);
             health = 30;
+            Game1.bulletDir = true;
         }
                 
         public override Vector2 GetDir() { return moveDir; }
@@ -494,8 +499,8 @@ namespace MetroidVF
 
             // System.Console.WriteLine("RETORNO: " + Game1.map.TestCollisionRect(min, max));
 
-            Vector2 min = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f - 4);
-            Vector2 max = new Vector2(position.X + size.X / 2f + 4, position.Y + size.Y / 2f + 4);
+            Vector2 min = new Vector2(position.X - size.X / 2f +14 , position.Y + size.Y / 2f - 4);
+            Vector2 max = new Vector2(position.X + size.X / 2f -14, position.Y + size.Y / 2f + 4);
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -585,15 +590,13 @@ namespace MetroidVF
         {
             if (other is Enemy2)
             {
-                
-                    Character c = (Character)other;
-                    this.setHealth(-8);
+                this.SetHealth(-8);
                     
 
-                    if (this.getHealth() <= 0)
-                    {
-                        Game1.entities.Remove(this);
-                    }
+                if (this.GetHealth() <= 0)
+                {
+                    Game1.entities.Remove(this);
+                }
                                 
             }
         }
@@ -601,6 +604,14 @@ namespace MetroidVF
         public static string GetVida()
         {
             return "" + health;
+        }
+
+
+        
+
+        public override bool WantsToFire()
+        {
+            return Keyboard.GetState().IsKeyDown(Keys.LeftControl);
         }
 
 
@@ -614,6 +625,8 @@ namespace MetroidVF
             return new Vector2(position.X + (size.X / 2) - 13, position.Y + (size.Y / 2) - 4);
             //return position + size / 2;
         }
+
+
 
     }
 }

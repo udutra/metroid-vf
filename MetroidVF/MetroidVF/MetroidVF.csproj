@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Entity\Body\Body.cs" />
+    <Compile Include="Entity\Body\Bullet\Bullet.cs" />
     <Compile Include="Entity\Body\Character\Character.cs" />
     <Compile Include="Entity\Body\Character\Enemy\Enemy1.cs" />
     <Compile Include="Entity\Body\Character\Enemy\Enemy2.cs" />

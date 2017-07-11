@@ -15,7 +15,9 @@ namespace MetroidVF
         public static List<Entity> entities = new List<Entity>();
         public static Map map;
         Texture2D uiTex;
-        SpriteFont uiFont;        
+        SpriteFont uiFont;
+        public static bool bulletDir;
+        public static bool BulletUP;
 
         enum GameState { Null, MainMenu, Playing };
         GameState currGameState = GameState.MainMenu;
@@ -105,9 +107,10 @@ namespace MetroidVF
             Human.Content = Content;
             Enemy1.Content = Content;
             Enemy2.Content = Content;
+            Bullet.Content = Content;
             
 
-            entities.Add(new Human(new Vector2(1500, 325)));
+            entities.Add(new Human(new Vector2(1000, 305)));
 
             //Enemy2 POS OK!
             entities.Add(new Enemy2(new Vector2(905, 80)));
