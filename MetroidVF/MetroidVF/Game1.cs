@@ -263,7 +263,7 @@ namespace MetroidVF
         public static void DrawHumano()
         {
             //Samus
-            hum = new Human(new Vector2(2856, 220));
+            hum = new Human(new Vector2(4800, 220));
             entities.Add(hum);
             
         }
