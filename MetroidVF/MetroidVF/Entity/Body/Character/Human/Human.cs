@@ -25,7 +25,7 @@ namespace MetroidVF
         public float health;
         float imuneCounter = 0f;
         SoundEffect sndStart, sndGame, sndJump, sndShoot;
-        SoundEffectInstance playSong;
+        public SoundEffectInstance playSong;
 
 
         public enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
@@ -699,6 +699,11 @@ namespace MetroidVF
                             moveDir += Vector2.UnitX;
                         }
 
+                        if (KeyState.IsKeyDown(Keys.Right) && KeyState.IsKeyDown(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.LookingRight);
+                        }
+
                         if (KeyState.IsKeyDown(Keys.Space))
                         {
                             EnterPlayerState(PlayerState.jumpingRight);
@@ -725,6 +730,11 @@ namespace MetroidVF
                         if (KeyState.IsKeyDown(Keys.Left))
                         {
                             moveDir -= Vector2.UnitX;
+                        }
+
+                        if (KeyState.IsKeyDown(Keys.Left) && KeyState.IsKeyDown(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.LookingLeft);
                         }
 
                         if (KeyState.IsKeyDown(Keys.Space))
@@ -932,7 +942,21 @@ namespace MetroidVF
         {
             if (other is Enemy1)
             {
+                if (imune == true)
+                {
+                    return;
+                }
+                Game1.hum.SetHealth(-8);
+                Game1.hum.imune = true;
 
+                if (Game1.hum.GetHealth() <= 0)
+                {
+                    Game1.entities.Remove(Game1.hum);
+                    //Game1.DrawHumano();
+                    playSong.Stop();
+                    Game1.currGameState = Game1.GameState.Null;
+                    Game1.EnterGameState(Game1.currGameState);
+                }
             }
             if(other is Enemy2)
             {
@@ -947,7 +971,8 @@ namespace MetroidVF
                 {
                     Game1.entities.Remove(Game1.hum);
                     //Game1.DrawHumano();
-                    Game1.currGameState = Game1.GameState.MainMenu;
+                    playSong.Stop();
+                    Game1.currGameState = Game1.GameState.Null;
                     Game1.EnterGameState(Game1.currGameState);
                 }
             }

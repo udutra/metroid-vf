@@ -16,7 +16,7 @@ namespace MetroidVF
         public static Camera camera = null;
         public static List<Entity> entities = new List<Entity>();
         public static Map map;
-        public static Texture2D uiTex, texMainMenu;
+        public static Texture2D uiTex, texMainMenu, texGameOver;
         public static SpriteFont uiFont;
         public static bool bulletDir;
         public static bool BulletUP;
@@ -28,6 +28,7 @@ namespace MetroidVF
         public static SoundEffectInstance playSound;
         public SoundEffect sndMenu;
         public static bool iniciaMusica = false;
+        float timeCounter = 0f;
 
         public enum GameState { Null, MainMenu, Playing };
         public static GameState currGameState = GameState.MainMenu;
@@ -40,6 +41,12 @@ namespace MetroidVF
 
             switch (currGameState)
             {
+                case GameState.Null:
+                    {
+                        
+                    }
+                    break;
+
                 case GameState.MainMenu:
                     {
                          playSound.Play();
@@ -62,6 +69,13 @@ namespace MetroidVF
         {
             switch (currGameState)
             {
+
+                case GameState.Null:
+                    {
+                       
+                    }
+                    break;
+
                 case GameState.MainMenu:
                     {
                         playSound.Stop();
@@ -81,8 +95,23 @@ namespace MetroidVF
 
         public void UpdateGameState(GameTime gameTime)
         {
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             switch (currGameState)
             {
+
+                case GameState.Null:
+                    {
+                        if(timeCounter <= 4)
+                        {
+                            timeCounter += dt;
+                        }
+                        else
+                        {
+                            EnterGameState(GameState.MainMenu);
+                        }
+                    }
+                    break;
+
                 case GameState.MainMenu:
                     {
                         playSound.Play();
@@ -98,6 +127,7 @@ namespace MetroidVF
 
                 case GameState.Playing:
                     {
+                        timeCounter = 0;
                         List<Entity> tmp = new List<Entity>(entities);
                         foreach (Entity e in tmp)
                             e.Update(gameTime);
@@ -110,6 +140,13 @@ namespace MetroidVF
         {
             switch (currGameState)
             {
+
+                case GameState.Null:
+                    {
+                        spriteBatch.Draw(texGameOver, new Vector2(1, 1), Color.White);
+                    }
+                    break;
+
                 case GameState.Playing:
                     {
                         foreach (Entity e in entities)
@@ -185,7 +222,8 @@ namespace MetroidVF
 
             //MainMenu
             texMainMenu = Content.Load<Texture2D>("Sprites/MainMenu");
-            
+            texGameOver = Content.Load<Texture2D>("Sprites/gameOver");
+
             EnterGameState(GameState.MainMenu);
 
         }
@@ -199,8 +237,8 @@ namespace MetroidVF
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            
 
-           
 
             UpdateGameState(gameTime);
 
@@ -225,7 +263,7 @@ namespace MetroidVF
         public static void DrawHumano()
         {
             //Samus
-            hum = new Human(new Vector2(3150, 305));
+            hum = new Human(new Vector2(1400, 305));
             entities.Add(hum);
             
         }

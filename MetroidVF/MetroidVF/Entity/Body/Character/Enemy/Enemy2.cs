@@ -384,10 +384,16 @@ namespace MetroidVF
 
         public override bool IgnoreCollision(Entity other)
         {
-            if(other is Enemy2)
+            if (other is Enemy1)
             {
                 return true;
             }
+
+            if (other is Enemy2)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -419,8 +425,9 @@ namespace MetroidVF
 
                 if (Game1.hum.GetHealth() <= 0)
                 {
+                    Game1.hum.playSong.Stop();
                     Game1.entities.Remove(other);
-                    Game1.currGameState = Game1.GameState.MainMenu;
+                    Game1.currGameState = Game1.GameState.Null;
                 }
             }
 
