@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace MetroidVF
@@ -14,11 +15,15 @@ namespace MetroidVF
         public static Camera camera = null;
         public static List<Entity> entities = new List<Entity>();
         public static Map map;
-        Texture2D uiTex, texMainMenu;
-        SpriteFont uiFont;
+        public static Texture2D uiTex, texMainMenu;
+        public static SpriteFont uiFont;
         public static bool bulletDir;
         public static bool BulletUP;
         public static Human hum;
+        public static Door d1, d2;
+        public static PowerUp pu1;
+        public static Enemy2 e21, e22, e23;
+        public static Enemy1 e11, e12;
 
         public enum GameState { Null, MainMenu, Playing };
         public static GameState currGameState = GameState.MainMenu;
@@ -87,12 +92,13 @@ namespace MetroidVF
                         foreach (Entity e in entities)
                         {
                             e.Draw(gameTime);
-
-                            spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
-                            string aux = "" + hum.GetHealth();
-                            spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
-
-
+                            if(e is Human)
+                            {
+                                //Game1.DrawHumano();
+                                spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
+                                string aux = "" + hum.GetHealth();
+                                spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
+                            }
                         }
                     }
                     break;
@@ -100,6 +106,10 @@ namespace MetroidVF
                 case GameState.MainMenu:
                     {
                         spriteBatch.Draw(texMainMenu, new Vector2(1, 1), Color.White);
+                        
+                        Game1.limpaSala1();
+                        Game1.DrawInimigosSala1();
+                        
                     }
                     break;
             }
@@ -134,13 +144,12 @@ namespace MetroidVF
             Door.Content = Content;
             PowerUp.Content = Content;
 
-           
 
-            //Samus
-            hum = new Human(new Vector2(1032, 305));
-            entities.Add(hum);
+            Game1.DrawHumano();
 
-            
+
+
+
 
             //UI
             uiTex = Content.Load<Texture2D>("Sprites/UI");
@@ -148,7 +157,7 @@ namespace MetroidVF
 
             //MainMenu
             texMainMenu = Content.Load<Texture2D>("Sprites/MainMenu");
-
+            
             EnterGameState(GameState.MainMenu);
 
         }
@@ -185,27 +194,59 @@ namespace MetroidVF
             base.Draw(gameTime);
         }
 
+        public static void DrawHumano()
+        {
+            //Samus
+            hum = new Human(new Vector2(1032, 305));
+            entities.Add(hum);
+            
+        }
 
-        public static void DrawInimigos()
+        public static void DrawInimigosSala1()
         {
             //Doors
-            entities.Add(new Door(new Vector2(2430, 209)));
-            entities.Add(new Door(new Vector2(2942, 209)));
-            
+            d1 = new Door(new Vector2(2430, 209));
+            d2 = new Door(new Vector2(2942, 209));
+            entities.Add(d1);
+            entities.Add(d2);
+
 
             //PowerUP
-            entities.Add(new PowerUp(new Vector2(465, 290)));
+            pu1 = new PowerUp(new Vector2(465, 290));
+            entities.Add(pu1);
 
             //Enemy2 sala 1
-            entities.Add(new Enemy2(new Vector2(935, 80)));
-            entities.Add(new Enemy2(new Vector2(1132, 81)));
-            entities.Add(new Enemy2(new Vector2(2185, 400)));
-            //enemy2 sala 2
-            entities.Add(new Enemy2(new Vector2(2706, 177)));
+            e21 = new Enemy2(new Vector2(935, 80));
+            e22 = new Enemy2(new Vector2(1132, 81));
+            e23 = new Enemy2(new Vector2(2185, 400));
+            entities.Add(e21);
+            entities.Add(e22);
+            entities.Add(e23);
+            
 
             //Enemy1 sala 1
-            entities.Add(new Enemy1(new Vector2(1490, 65)));
-            entities.Add(new Enemy1(new Vector2(1646, 125)));
+            e11 = new Enemy1(new Vector2(1490, 65));
+            e12 = new Enemy1(new Vector2(1646, 125));
+            entities.Add(e11);
+            entities.Add(e12);
+        }
+        public static void DrawInimigosSala2()
+        {
+            //enemy2 sala 2
+            entities.Add(new Enemy2(new Vector2(2706, 177)));
+        }
+
+        public static void limpaSala1()
+        {
+            Console.WriteLine("Limpou");
+            entities.Remove(d1);
+            entities.Remove(d2);
+            entities.Remove(pu1);
+            entities.Remove(e21);
+            entities.Remove(e22);
+            entities.Remove(e23);
+            entities.Remove(e11);
+            entities.Remove(e12);
         }
     }
 }

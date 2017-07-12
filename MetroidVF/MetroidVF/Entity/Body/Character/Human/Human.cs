@@ -214,7 +214,9 @@ namespace MetroidVF
             {
                 case PlayerState.Start:
                     {
-                        Game1.DrawInimigos();
+                        //Game1.DrawHumano();
+                        //Game1.limpaSala1();
+                        //Game1.DrawInimigosSala1();
                     }
                     break;
 
@@ -921,7 +923,8 @@ namespace MetroidVF
 
                 if (Game1.hum.GetHealth() <= 0)
                 {
-                    Game1.entities.Remove(other);
+                    Game1.entities.Remove(Game1.hum);
+                    Game1.DrawHumano();
                     Game1.currGameState = Game1.GameState.MainMenu;
                 }
             }
