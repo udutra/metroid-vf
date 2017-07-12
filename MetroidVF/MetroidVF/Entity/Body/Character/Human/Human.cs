@@ -209,7 +209,7 @@ namespace MetroidVF
 
                 case PlayerState.Imune:
                     {
-                        
+                        spriteSheet.PlayAnim(3, 3, 1f);
                     }
                     break;
             }
@@ -982,6 +982,11 @@ namespace MetroidVF
                 hasPowerUp = true;
                 PowerUp p = (PowerUp)other;
                 Game1.entities.Remove(p);
+            }
+
+            if (other is ExitGame)
+            {
+                EnterPlayerState(PlayerState.Imune);
             }
         }
 

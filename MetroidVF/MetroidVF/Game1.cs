@@ -207,6 +207,7 @@ namespace MetroidVF
             Bullet.Content = Content;
             Door.Content = Content;
             PowerUp.Content = Content;
+            ExitGame.Content = Content;
 
 
             

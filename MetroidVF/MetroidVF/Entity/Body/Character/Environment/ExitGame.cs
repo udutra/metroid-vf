@@ -14,7 +14,7 @@ namespace MetroidVF
 
         public ExitGame(Vector2 initPos) : base(initPos)
         {
-            texExit = Content.Load<Texture2D>("SpriteSheet/exitSheet");
+            texExit = Content.Load<Texture2D>("SpriteSheets/exitSheet");
 
             exitSheet = new SpriteSheet(texExit, 2, 1);
             exitSheet.PlayAnim(0, 2, 30f);
