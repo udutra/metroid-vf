@@ -25,7 +25,7 @@ namespace MetroidVF
         public static PowerUp pu1;
         public static ExitGame eg1;
         public static Enemy2 e21, e22, e23, e24, e25, e26, e27;
-        public static Enemy1 e11, e12, e13, e14, e15;
+        public static Enemy1 e11, e12, e13, e14, e15, e16;
         public static SoundEffectInstance playSound;
         public SoundEffect sndMenu;
         public static bool iniciaMusica = false;
@@ -44,7 +44,8 @@ namespace MetroidVF
             {
                 case GameState.Null:
                     {
-                        
+                        hum = null;
+                        DrawHumano();
                     }
                     break;
 
@@ -265,8 +266,8 @@ namespace MetroidVF
         public static void DrawHumano()
         {
             //Samus
-            //hum = new Human(new Vector2(4800, 220));
-            hum = new Human(new Vector2(1038, 250));
+            hum = new Human(new Vector2(1038, 335));
+            //hum = new Human(new Vector2(4538, 335));
             entities.Add(hum);
             
         }
@@ -305,7 +306,7 @@ namespace MetroidVF
             entities.Add(d2);
             //enemy2 sala 2
             e24 = new Enemy2(new Vector2(2686, 175));
-            entities.Add(e24);
+           // entities.Add(e24);
         }
 
         public static void DrawInimigosSala3()
@@ -321,9 +322,11 @@ namespace MetroidVF
             e13 = new Enemy1(new Vector2(3215, 100));
             e14 = new Enemy1(new Vector2(3250, 125));
             e15 = new Enemy1(new Vector2(3692, 125));
+            e16 = new Enemy1(new Vector2(4450, 125));
             entities.Add(e13);
             entities.Add(e14);
             entities.Add(e15);
+            entities.Add(e16);
 
             d3 = new Door(new Vector2(4950, 368));
             entities.Add(d3);

@@ -759,7 +759,7 @@ namespace MetroidVF
                     {
                         if(timeCounter <= 3f)
                         {
-                            position.Y -= 3f;
+                            position.Y -= 5f;
                             timeCounter += dt;
                         }
                         else
