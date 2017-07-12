@@ -290,3 +290,9 @@
 /processorParam:Quality=Best
 /build:Sounds/tiro.wav
 
+#begin Sounds/soundJump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/soundJump.wav
+

@@ -24,7 +24,9 @@ namespace MetroidVF
         public bool imune = false;
         public float health;
         float imuneCounter = 0f;
-        
+        SoundEffect sndStart, sndGame, sndJump, sndShoot;
+        SoundEffectInstance playSong;
+
 
         public enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
         public PlayerState currPlayerState = PlayerState.Null;
@@ -43,7 +45,8 @@ namespace MetroidVF
                 case PlayerState.Start:
                     {
                         //Animation Start
-                        spriteSheet.PlayAnim(0, 3, 0.7f);
+                        spriteSheet.PlayAnim(0, 3, 0.5f);
+                        sndStart.Play();
                     }
                     break;
 
@@ -85,6 +88,7 @@ namespace MetroidVF
 
                 case PlayerState.Jumping:
                     {
+                        sndJump.Play();
                         oldJumpState = PlayerState.Jumping;
                         timeCounter = 0f;
                         bkpPosition = position;
@@ -103,6 +107,7 @@ namespace MetroidVF
 
                 case PlayerState.jumpingRight:
                     {
+                        sndJump.Play();
                         oldJumpState = PlayerState.jumpingRight;
                         timeCounter = 0f;
                         bkpPosition = position;
@@ -114,6 +119,7 @@ namespace MetroidVF
 
                 case PlayerState.jumpingLeft:
                     {
+                        sndJump.Play();
                         oldJumpState = PlayerState.jumpingLeft;
                         timeCounter = 0f;
                         bkpPosition = position;
@@ -217,7 +223,8 @@ namespace MetroidVF
                     {
                         //Game1.DrawHumano();
                         //Game1.limpaSala1();
-                        //Game1.DrawInimigosSala1();
+                        //Game1.DrawInimigosSala1();     
+                        playSong.Play();                   
                     }
                     break;
 
@@ -304,7 +311,7 @@ namespace MetroidVF
             {
                 case PlayerState.Start:
                     {                        
-                       if (timeCounter <= 5f)
+                       if (timeCounter <= 6.5f)
                        {                           
                            timeCounter += dt;
                        }
@@ -422,7 +429,8 @@ namespace MetroidVF
                     break;
 
                 case PlayerState.Jumping:
-                    {                        
+                    {
+                        
                         if (timeCounter <= jumpTime && !IsOnRoof())
                         {                            
                             if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
@@ -463,7 +471,8 @@ namespace MetroidVF
                     break;
 
                 case PlayerState.jumpingRight:
-                    {                        
+                    {
+                        
                         if (timeCounter <= jumpTime && !IsOnRoof())
                         {                            
                             if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
@@ -498,7 +507,8 @@ namespace MetroidVF
                     break;
 
                 case PlayerState.jumpingLeft:
-                    {                        
+                    {
+                                            
                         if (timeCounter <= jumpTime && !IsOnRoof())
                         {
                             if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
@@ -744,18 +754,24 @@ namespace MetroidVF
 
         public Human(Vector2 initPos) : base(initPos)
         {
+            sndStart = Content.Load<SoundEffect>("Sounds/Animacao_Samus");
+            sndGame = Content.Load<SoundEffect>("Sounds/Musica_Jogo");
+            sndJump = Content.Load<SoundEffect>("Sounds/soundJump");
+            sndShoot = Content.Load<SoundEffect>("Sounds/tiro");
+
+            playSong = sndGame.CreateInstance();
+            playSong.IsLooped = true;
+
+
             texSamusStart = Content.Load<Texture2D>("SpriteSheets/samusSheet");
             texSamusBall = Content.Load<Texture2D>("SpriteSheets/ballSheet");
+
             spriteSheet = new SpriteSheet(texSamusStart, 22, 2);
             ballMove = new SpriteSheet(texSamusBall, 4, 1);
             EnterPlayerState(PlayerState.Start);
             health = 30;
             Game1.bulletDir = true;
             speed = 230;
-            
-
-
-
 
         }
                 
@@ -959,7 +975,7 @@ namespace MetroidVF
             if((currPlayerState == PlayerState.Start || currPlayerState == PlayerState.jumpingRight || currPlayerState == PlayerState.jumpingLeft || oldJumpState == PlayerState.jumpingRight || oldJumpState == PlayerState.jumpingLeft || isBall == true))
             {
                 return false;
-            }
+            }            
             return Keyboard.GetState().IsKeyDown(Keys.LeftControl);
         }
 
