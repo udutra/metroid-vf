@@ -254,3 +254,39 @@
 /processorParam:TextureFormat=Color
 /build:SpriteSheets/doorSheett.png
 
+#begin Sounds/Animacao_Samus.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Animacao_Samus.wav
+
+#begin Sounds/Musica_Jogo.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Musica_Jogo.wav
+
+#begin Sounds/Obtem_item.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Obtem_item.wav
+
+#begin Sounds/passo.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/passo.wav
+
+#begin Sounds/Tela_Inicial.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Tela_Inicial.wav
+
+#begin Sounds/tiro.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/tiro.wav
+

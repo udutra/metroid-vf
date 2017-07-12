@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -24,11 +25,14 @@ namespace MetroidVF
         public static PowerUp pu1;
         public static Enemy2 e21, e22, e23;
         public static Enemy1 e11, e12;
+        public static SoundEffectInstance playSound;
+        public SoundEffect sndMenu;
+        public static bool iniciaMusica = false;
 
         public enum GameState { Null, MainMenu, Playing };
         public static GameState currGameState = GameState.MainMenu;
 
-        public void EnterGameState(GameState newState)
+        public static void EnterGameState(GameState newState)
         {
             LeaveGameState();
 
@@ -37,25 +41,38 @@ namespace MetroidVF
             switch (currGameState)
             {
                 case GameState.MainMenu:
-                    { }
+                    {
+                         playSound.Play();
+
+                    }
                     break;
 
                 case GameState.Playing:
-                    { }
+                    {
+                        iniciaMusica = true;
+                        DrawHumano();
+
+                        //DrawInimigosSala1();
+                    }
                     break;
             }
         }
 
-        public void LeaveGameState()
+        public static void LeaveGameState()
         {
             switch (currGameState)
             {
                 case GameState.MainMenu:
-                    { }
+                    {
+                        playSound.Stop();
+                    }
                     break;
 
                 case GameState.Playing:
-                    { }
+                    {
+                        LimpaSala1();
+                        
+                    }
                     break;               
             }
         }
@@ -66,9 +83,13 @@ namespace MetroidVF
             {
                 case GameState.MainMenu:
                     {
+                        playSound.Play();
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                         {
+                            
                             EnterGameState(GameState.Playing);
+                            iniciaMusica = true;
+
                         }
                     }
                     break;
@@ -94,7 +115,6 @@ namespace MetroidVF
                             e.Draw(gameTime);
                             if(e is Human)
                             {
-                                //Game1.DrawHumano();
                                 spriteBatch.Draw(uiTex, new Vector2(50, 75), Color.White);
                                 string aux = "" + hum.GetHealth();
                                 spriteBatch.DrawString(uiFont, aux, new Vector2(130, 80), Color.White);
@@ -107,7 +127,7 @@ namespace MetroidVF
                     {
                         spriteBatch.Draw(texMainMenu, new Vector2(1, 1), Color.White);
                         
-                        Game1.limpaSala1();
+                        Game1.LimpaSala1();
                         Game1.DrawInimigosSala1();
                         
                     }
@@ -145,9 +165,11 @@ namespace MetroidVF
             PowerUp.Content = Content;
 
 
-            Game1.DrawHumano();
-
-
+            
+            sndMenu = Content.Load<SoundEffect>("Sounds/Tela_Inicial");
+            playSound = sndMenu.CreateInstance();
+            playSound.IsLooped = true;
+            
 
 
 
@@ -236,9 +258,8 @@ namespace MetroidVF
             entities.Add(new Enemy2(new Vector2(2706, 177)));
         }
 
-        public static void limpaSala1()
+        public static void LimpaSala1()
         {
-            Console.WriteLine("Limpou");
             entities.Remove(d1);
             entities.Remove(d2);
             entities.Remove(pu1);
@@ -247,6 +268,9 @@ namespace MetroidVF
             entities.Remove(e23);
             entities.Remove(e11);
             entities.Remove(e12);
+            iniciaMusica = false;
         }
+
+        
     }
 }

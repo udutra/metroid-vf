@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MetroidVF
 {
@@ -23,7 +24,7 @@ namespace MetroidVF
         public bool imune = false;
         public float health;
         float imuneCounter = 0f;
-
+        
 
         public enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
         public PlayerState currPlayerState = PlayerState.Null;
@@ -751,6 +752,11 @@ namespace MetroidVF
             health = 30;
             Game1.bulletDir = true;
             speed = 230;
+            
+
+
+
+
         }
                 
         public override Vector2 GetDir() { return moveDir; }
@@ -924,8 +930,9 @@ namespace MetroidVF
                 if (Game1.hum.GetHealth() <= 0)
                 {
                     Game1.entities.Remove(Game1.hum);
-                    Game1.DrawHumano();
+                    //Game1.DrawHumano();
                     Game1.currGameState = Game1.GameState.MainMenu;
+                    Game1.EnterGameState(Game1.currGameState);
                 }
             }
 
@@ -968,6 +975,7 @@ namespace MetroidVF
             //return position + size / 2;
         }
 
+        
 
 
     }
