@@ -319,17 +319,7 @@ namespace MetroidVF
 
         public override bool IgnoreCollision(Entity other)
         {
-            if (other is Enemy1)
-            {
-                return true;
-            }
-
-            if (other is Enemy2)
-            {
-                return true;
-            }
-
-            
+                       
             return false;
         }
 
