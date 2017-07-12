@@ -122,7 +122,7 @@ namespace MetroidVF
             else
             {
                 fireTimer -= dt;
-            }
-        } 
+            }              
+        }
     }
 }

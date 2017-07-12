@@ -10,6 +10,7 @@ namespace MetroidVF
         public Vector2 size;
         public float speed = 200f;
         public float rotation = 0;
+        public Color color = Color.White;
 
         public Body(Vector2 initPos)
         {
@@ -118,7 +119,7 @@ namespace MetroidVF
               Game1.spriteBatch.Draw(sprite,
               Game1.camera.ProjectPos(position),
               sourceRectangle,
-              Color.White,
+              color,
               rotation,
               new Vector2(spriteWidth,
                           spriteHeight) / 2f, //pivot

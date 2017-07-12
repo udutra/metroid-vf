@@ -20,7 +20,9 @@ namespace MetroidVF
         public bool lookingRight;
         public bool hasPowerUp = false;
         public bool isBall = false;
+        public bool imune = false;
         public float health;
+        float imuneCounter = 0f;
 
 
         public enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
@@ -862,10 +864,9 @@ namespace MetroidVF
             spriteSheet.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
             ballMove.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
 
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             UpdatePlayerState(gameTime);
-            
-            
            
             gameTimeLeave = gameTime;
             AffectWithGravity();
@@ -878,8 +879,21 @@ namespace MetroidVF
                     EnterPlayerState(PlayerState.Falling);
                 }
             }
+            if(imune == true)
+            {
+                color = Color.CornflowerBlue;
+                if(imuneCounter <= 3f)
+                {
+                    imuneCounter += dt;
+                }
+                else
+                {
+                    imune = false;
+                    color = Color.White;
+                    imuneCounter = 0;
+                }
+            }
             
-
             base.Update(gameTime);
             Game1.camera.camPos = position;
             Game1.camera.camZoom = camZoom;
@@ -892,7 +906,14 @@ namespace MetroidVF
 
         public override void CollisionDetected(Entity other)
         {
-            
+            if (other is Enemy1)
+            {
+
+            }
+            if(other is Enemy2)
+            {
+               // imune = true;
+            }
 
             if (other is PowerUp)
             {
@@ -911,11 +932,10 @@ namespace MetroidVF
         {
             health += f;
         }
-
-
+        
         public override bool WantsToFire()
         {
-            if(currPlayerState == PlayerState.jumpingRight || currPlayerState == PlayerState.jumpingLeft || oldJumpState == PlayerState.jumpingRight || oldJumpState == PlayerState.jumpingLeft || isBall == true)
+            if((currPlayerState == PlayerState.Idle || currPlayerState == PlayerState.jumpingRight || currPlayerState == PlayerState.jumpingLeft || oldJumpState == PlayerState.jumpingRight || oldJumpState == PlayerState.jumpingLeft || isBall == true))
             {
                 return false;
             }
