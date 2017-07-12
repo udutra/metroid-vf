@@ -19,6 +19,7 @@ namespace MetroidVF
         public float health = 100f;
         public float timeImune;
         public bool stoped = false;
+        bool andandoPorta, ehPorta;
 
         enum EnemyState { Null, Right, Up, Down, Left, Stop }
         EnemyState currentEnState = EnemyState.Stop;
@@ -146,6 +147,8 @@ namespace MetroidVF
                     {
                         moveDir = Vector2.Zero;
 
+                        
+
                         if (IsOnFirmGround() && IsOnRight())
                         {
                             rotation -= 1.57f;
@@ -167,7 +170,10 @@ namespace MetroidVF
                 case EnemyState.Left:
                     {
                         moveDir = Vector2.Zero;
-                        if(IsOnRoof() && IsOnLeft())
+
+                        
+
+                        if (IsOnRoof() && IsOnLeft())
                         {
                             rotation -= 1.57f;
                             currentEnState = EnemyState.Down;
@@ -188,19 +194,35 @@ namespace MetroidVF
                 case EnemyState.Up:
                     {
                         moveDir = Vector2.Zero;
-                        if(IsOnRight() && IsOnRoof())
-                        {
-                            rotation -= 1.57f;
-                            currentEnState = EnemyState.Left;
-                        }
-                        if (IsOnRight())
+
+                        
+
+                        if (andandoPorta)
                         {
                             moveDir -= Vector2.UnitY;
                         }
                         else
                         {
-                            rotation += 1.57f;
-                            currentEnState = EnemyState.Right;
+                            if (IsOnRight() && IsOnRoof())
+                            {
+                                rotation -= 1.57f;
+                                currentEnState = EnemyState.Left;
+                            }
+                            if (IsOnRight())
+                            {
+
+                                moveDir -= Vector2.UnitY;
+                            }
+
+                            else
+                            {
+                                rotation += 1.57f;
+                                currentEnState = EnemyState.Right;
+                            }
+                        }
+                        if (!ehPorta)
+                        {
+                            andandoPorta = false;
                         }
                     }
                     break;
@@ -336,6 +358,15 @@ namespace MetroidVF
             return Game1.map.TestCollisionRect(min, max);
         }
 
+        public bool IsOnRightDoor()
+        {
+            Vector2 max = new Vector2(position.X + size.X / 2f + 16, position.Y - size.Y / 2f);
+            Vector2 min = new Vector2(position.X - size.X / 2f - 32, position.Y + size.Y / 2f);
+            //  System.Console.WriteLine("RETORNO DIREITA: " + Game1.map.TestCollisionRect(min, max));
+
+            return TestCollisionRect(min, max);
+        }
+
         public bool IsOnLeft()
         {
             Vector2 max = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f + 4);
@@ -353,8 +384,23 @@ namespace MetroidVF
 
         public override bool IgnoreCollision(Entity other)
         {
-                       
+            if(other is Enemy2)
+            {
+                return true;
+            }
             return false;
+        }
+
+        public bool CollisionDetectedDoor(Entity other)
+        {
+            if (other is Door)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public override void CollisionDetected(Entity other)
@@ -377,6 +423,23 @@ namespace MetroidVF
                     Game1.currGameState = Game1.GameState.MainMenu;
                 }
             }
+
+            if (other is Door)
+            {
+                ehPorta = true;
+                if (IsOnRightDoor())
+                {
+                    andandoPorta = true;
+                    rotation -= 1.57f;
+                    currentEnState = EnemyState.Up;
+                }
+            }
+            else
+            {
+                ehPorta = false;
+            }
+
+
         }
 
         public override void Update(GameTime gameTime)
