@@ -17,9 +17,12 @@ namespace MetroidVF
         Texture2D teste;
         Vector2 moveDir;
         public float health = 100f;
+        public float timeImune;
+        public bool stoped = false;
 
-        enum EnemyState { Right, Up, Down, Left, Stop }
+        enum EnemyState { Null, Right, Up, Down, Left, Stop }
         EnemyState currentEnState = EnemyState.Stop;
+        EnemyState oldEnState = EnemyState.Null;
 
         void EnterEnemyState(EnemyState newState)
         {
@@ -29,6 +32,12 @@ namespace MetroidVF
 
             switch (currentEnState)
             {
+                case EnemyState.Null:
+                    {
+                       
+                    }
+                    break;
+
                 case EnemyState.Right:
                     {
 
@@ -64,21 +73,27 @@ namespace MetroidVF
         {
             switch (currentEnState)
             {
+                case EnemyState.Null:
+                    {
+                        timeImune = 0;
+                    }
+                    break;
+
                 case EnemyState.Right:
                     {
-
+                        
                     }
                     break;
 
                 case EnemyState.Left:
                     {
-
+                       
                     }
                     break;
 
                 case EnemyState.Up:
                     {
-
+                        
                     }
                     break;
 
@@ -90,6 +105,7 @@ namespace MetroidVF
 
                 case EnemyState.Stop:
                     {
+                        
                     }
                     break;
             }
@@ -106,8 +122,26 @@ namespace MetroidVF
 
         void UpdateEnemyState(GameTime gameTime)
         {
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             switch (currentEnState)
             {
+                case EnemyState.Null:
+                    {
+                        moveDir = Vector2.Zero;
+                        
+                        if (timeImune <= 1f)
+                        {
+                            timeImune += dt;
+                        }
+                        else
+                        {
+                            //currentEnState = oldEnState;
+                            
+                            EnterEnemyState(oldEnState);
+                        }
+                    }
+                    break;
+
                 case EnemyState.Right:
                     {
                         moveDir = Vector2.Zero;
@@ -349,6 +383,14 @@ namespace MetroidVF
         {
             UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
             UpdateEnemyState(gameTime);
+
+            if(health <= 50 && stoped == false)
+            {
+                stoped = true;
+                oldEnState = currentEnState;
+                EnterEnemyState(EnemyState.Null);
+            }
+
             base.Update(gameTime);
         }
     }
