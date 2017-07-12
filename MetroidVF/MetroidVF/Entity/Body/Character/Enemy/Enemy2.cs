@@ -21,7 +21,7 @@ namespace MetroidVF
         public bool stoped = false;
         bool andandoPorta, ehPorta;
 
-        enum EnemyState { Null, Right, Up, Down, Left, Stop }
+        enum EnemyState { Null, Right, Up, Down, Left, Stop, UpDoor, DownDoor }
         EnemyState currentEnState = EnemyState.Stop;
         EnemyState oldEnState = EnemyState.Null;
 
@@ -58,6 +58,17 @@ namespace MetroidVF
                     break;
 
                 case EnemyState.Down:
+                    {
+
+                    }
+                    break;
+                case EnemyState.UpDoor:
+                    {
+
+                    }
+                    break;
+
+                case EnemyState.DownDoor:
                     {
 
                     }
@@ -99,6 +110,17 @@ namespace MetroidVF
                     break;
 
                 case EnemyState.Down:
+                    {
+
+                    }
+                    break;
+                case EnemyState.UpDoor:
+                    {
+
+                    }
+                    break;
+
+                case EnemyState.DownDoor:
                     {
 
                     }
@@ -197,12 +219,12 @@ namespace MetroidVF
 
                         
 
-                        if (andandoPorta)
+                        /*if (andandoPorta)
                         {
                             moveDir -= Vector2.UnitY;
                         }
                         else
-                        {
+                        {*/
                             if (IsOnRight() && IsOnRoof())
                             {
                                 rotation -= 1.57f;
@@ -219,11 +241,11 @@ namespace MetroidVF
                                 rotation += 1.57f;
                                 currentEnState = EnemyState.Right;
                             }
-                        }
+                        /*}
                         if (!ehPorta)
                         {
                             andandoPorta = false;
-                        }
+                        }*/
                     }
                     break;
 
@@ -231,12 +253,8 @@ namespace MetroidVF
                     {
                         moveDir = Vector2.Zero;
 
-                        if (andandoPorta)
-                        {
-                            moveDir += Vector2.UnitY;
-                        }
-                        else
-                        {
+                        
+                        
                             if (IsOnLeft() && IsOnFirmGround())
                             {
                                 rotation -= 1.57f;
@@ -247,18 +265,18 @@ namespace MetroidVF
                             {
                                 moveDir += Vector2.UnitY;
                             }
+                            else if (IsOnLeftDoor() && andandoPorta)
+                            {
+                                moveDir += Vector2.UnitY;
+                            }
                             else
                             {
                                 rotation += 1.57f;
                                 currentEnState = EnemyState.Left;
                             }
                         }
-                        if (!ehPorta)
-                        {
-                            andandoPorta = false;
-                        }
 
-                    }
+                    
                     break;
 
                 case EnemyState.Stop:
@@ -274,6 +292,34 @@ namespace MetroidVF
                         {
                             currentEnState = EnemyState.Right;
                         }
+                    }
+                    break;
+
+                case EnemyState.UpDoor:
+                    {
+                        moveDir -= Vector2.UnitY;
+                        if (IsOnRoof())
+                        {
+                            rotation -= 1.57f;
+                            currentEnState = EnemyState.Left;
+                        }
+                    }
+                    break;
+
+                case EnemyState.DownDoor:
+                    {
+                        
+                        if (IsOnLeftDoor())
+                        {
+                            moveDir += Vector2.UnitY; 
+                        }
+                        if (IsOnLeftDoor() && IsOnFirmGround())
+                        {
+                            rotation -= 1.57f;
+                            moveDir += Vector2.UnitX;
+                            currentEnState = EnemyState.Right;
+                        }
+                        
                     }
                     break;
             }
@@ -372,8 +418,8 @@ namespace MetroidVF
 
         public bool IsOnRightDoor()
         {
-            Vector2 max = new Vector2(position.X + size.X / 2f + 16, position.Y - size.Y / 2f);
-            Vector2 min = new Vector2(position.X - size.X / 2f - 32, position.Y + size.Y / 2f);
+            Vector2 max = new Vector2(position.X + size.X / 2f + 4, position.Y - size.Y / 2f);
+            Vector2 min = new Vector2(position.X + size.X / 2f, position.Y + size.Y / 2f - 4);
             //  System.Console.WriteLine("RETORNO DIREITA: " + Game1.map.TestCollisionRect(min, max));
 
             return TestCollisionRect(min, max);
@@ -381,8 +427,8 @@ namespace MetroidVF
 
         public bool IsOnLeftDoor()
         {
-            Vector2 max = new Vector2(position.X + size.X / 2f + 32, position.Y + size.Y / 2f + 4);
-            Vector2 min = new Vector2(position.X - size.X / 2f - 16, position.Y - size.Y / 2f);
+            Vector2 max = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f);
+            Vector2 min = new Vector2(position.X - size.X / 2f -4, position.Y - size.Y / 2f-4);
 
             // System.Console.WriteLine("RETORNO ESQUERDO: " + Game1.map.TestCollisionRect(min, max));
             // System.Console.WriteLine("position.X: " + position.X);
@@ -424,17 +470,7 @@ namespace MetroidVF
             return false;
         }
 
-        public bool CollisionDetectedDoor(Entity other)
-        {
-            if (other is Door)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        
 
         public override void CollisionDetected(Entity other)
         {
@@ -442,7 +478,7 @@ namespace MetroidVF
             {
                 if (Game1.hum.imune == true)
                 {
-                    System.Console.WriteLine("RETORNO: " + Game1.hum.imune);
+                    //System.Console.WriteLine("RETORNO: " + Game1.hum.imune);
                     return;
                 }
 
@@ -457,28 +493,42 @@ namespace MetroidVF
                     Game1.currGameState = Game1.GameState.Null;
                 }
             }
+            if(other is Door)
+            {
+                if(currentEnState == EnemyState.Right)
+                {
+                    rotation -= 1.57f;
+                    currentEnState = EnemyState.UpDoor;
+                }
+                if (currentEnState == EnemyState.Left)
+                {
+                    rotation -= 1.57f;
+                    currentEnState = EnemyState.DownDoor;
+                }
+            }
 
-            if (other is Door)
+            /*if (other is Door)
             {
                 ehPorta = true;
-                if (IsOnRightDoor())
+                if (IsOnLeftDoor())
+                {
+                    andandoPorta = true;
+                    //currentEnState = EnemyState.Up;
+                }
+                else if (IsOnRightDoor())
                 {
                     andandoPorta = true;
                     rotation -= 1.57f;
                     currentEnState = EnemyState.Up;
                 }
 
-                if (IsOnLeftDoor())
-                {
-                    andandoPorta = true;
-                    currentEnState = EnemyState.Down;
-                }
+                
             }
             else
             {
                 ehPorta = false;
-            }
-
+            
+            }*/
 
         }
 
