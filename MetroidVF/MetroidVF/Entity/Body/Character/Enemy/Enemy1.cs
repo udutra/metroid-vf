@@ -14,7 +14,9 @@ namespace MetroidVF
         Vector2 moveDir;
         public float health = 100f;
         float timeCounter = 0;
+        float timeImune = 0;
         public bool explosion = false;
+        public bool stoped = false;
 
         enum EnemyState { Null , Stop, Down, Idle, Explode }
         EnemyState currentEnState;
@@ -54,7 +56,8 @@ namespace MetroidVF
                 case EnemyState.Explode:
                     {
                         explosion = true;
-                        //explodeSheet.PlayAnim(0, 2, 0.5f);
+                        explodeSheet.PlayAnim(0, 2, 10f);
+                        timeCounter = 0;
                     }
                     break;
             }
@@ -66,7 +69,7 @@ namespace MetroidVF
             {
                 case EnemyState.Null:
                     {
-
+                        timeImune = 0;
                     }
                     break;
 
@@ -103,7 +106,16 @@ namespace MetroidVF
             {
                 case EnemyState.Null:
                     {
-
+                        moveDir = Vector2.Zero;
+                        
+                        if (timeImune <= 1f)
+                        {
+                            timeImune += dt;
+                        }
+                        else
+                        {
+                            EnterEnemyState(EnemyState.Down);
+                        }
                     }
                     break;
 
@@ -153,6 +165,12 @@ namespace MetroidVF
                             moveDir += nearestBody.position - position;
                         }
 
+                        if (health <= 50 && stoped == false)
+                        {
+                            stoped = true;
+                            EnterEnemyState(EnemyState.Null);
+                        }
+
                         if (IsOnFirmGround())
                         {
                             EnterEnemyState(EnemyState.Stop);
@@ -162,6 +180,15 @@ namespace MetroidVF
 
                 case EnemyState.Explode:
                     {
+                        position.Y -= 0.5f;
+                        if (timeCounter <= 0.3f)
+                        {
+                            timeCounter += dt;
+                        }
+                        else
+                        {
+                            Game1.entities.Remove(this);
+                        }
                     }
                     break;
             }
@@ -205,7 +232,7 @@ namespace MetroidVF
         {
             if (explosion == true)
             {
-                return new Vector2(220, 128);
+                return new Vector2(200, 128);
             }
             else
             {
@@ -217,7 +244,7 @@ namespace MetroidVF
         {
             if (explosion == true)
             {
-                return explodeSheet.GetSourceRectangle((int)spriteSheet.animFrame);
+                return explodeSheet.GetSourceRectangle((int)explodeSheet.animFrame);
             }
             else
             {
@@ -279,18 +306,39 @@ namespace MetroidVF
                 return true;
             }
 
+          //  if (other is Human)
+          //  {
+          //      return true;
+          //  }
+            return false;
+        }
+
+        public override void CollisionDetected(Entity other)
+        {
             if (other is Human)
             {
-                return true;
-            }
-            return false;
+                if (Game1.hum.imune == true)
+                {
+                    System.Console.WriteLine("RETORNO: " + Game1.hum.imune);
+                    return;
+                }
+                  Human h = (Human)other;
+                  Game1.hum.SetHealth(-8);
+                  Game1.hum.imune = true;
+
+                  if (Game1.hum.GetHealth() <= 0)
+                  {
+                      Game1.entities.Remove(other);
+                      Game1.currGameState = Game1.GameState.MainMenu;
+                  }
+            }   
         }
 
         private void AffectWithGravity()
         {
             //Gravity
-            moveDir += Vector2.UnitX * 1f;
-            moveDir -= Vector2.UnitX * 1f;
+            moveDir += Vector2.UnitX * 10f;
+            moveDir -= Vector2.UnitX * 10f;
           //  moveDir += Vector2.UnitY * 1f;
         }
 
