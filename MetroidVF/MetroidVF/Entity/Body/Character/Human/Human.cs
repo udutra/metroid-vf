@@ -912,7 +912,18 @@ namespace MetroidVF
             }
             if(other is Enemy2)
             {
-               // imune = true;
+               if(imune == true)
+                {
+                    return;
+                }
+                Game1.hum.SetHealth(-8);
+                Game1.hum.imune = true;
+
+                if (Game1.hum.GetHealth() <= 0)
+                {
+                    Game1.entities.Remove(other);
+                    Game1.currGameState = Game1.GameState.MainMenu;
+                }
             }
 
             if (other is PowerUp)
