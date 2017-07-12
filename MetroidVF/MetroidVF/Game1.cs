@@ -324,10 +324,10 @@ namespace MetroidVF
             entities.Add(e14);
             entities.Add(e15);
 
-            d3 = new Door(new Vector2(4966, 381));
+            d3 = new Door(new Vector2(4948, 368));
             entities.Add(d3);
 
-            eg1 = new ExitGame(new Vector2(5118, 381));
+            eg1 = new ExitGame(new Vector2(5108, 368));
             entities.Add(d3);
 
         }
