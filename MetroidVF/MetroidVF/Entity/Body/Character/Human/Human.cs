@@ -209,6 +209,7 @@ namespace MetroidVF
 
                 case PlayerState.Imune:
                     {
+                        timeCounter = 0; 
                         spriteSheet.PlayAnim(3, 3, 1f);
                     }
                     break;
@@ -296,7 +297,7 @@ namespace MetroidVF
 
                 case PlayerState.Imune:
                     {
-
+                        timeCounter = 0;
                     }
                     break;
             }
@@ -756,7 +757,16 @@ namespace MetroidVF
 
                 case PlayerState.Imune:
                     {
-
+                        if(timeCounter <= 3f)
+                        {
+                            position.Y -= 3f;
+                            timeCounter += dt;
+                        }
+                        else
+                        {
+                            playSong.Stop();
+                            Game1.currGameState = Game1.GameState.Null;
+                        }
                     }
                     break;
             }
@@ -846,8 +856,8 @@ namespace MetroidVF
 
             Vector2 min = new Vector2(position.X - size.X / 2f +14 , position.Y + size.Y / 2f - 4);
             Vector2 max = new Vector2(position.X + size.X / 2f -14, position.Y + size.Y / 2f + 4);
-            System.Console.WriteLine("position.y: " + position.Y);
-            System.Console.WriteLine("position.x: " + position.X);
+            //System.Console.WriteLine("position.y: " + position.Y);
+            //System.Console.WriteLine("position.x: " + position.X);
 
             return Game1.map.TestCollisionRect(min, max);
         }
@@ -986,7 +996,10 @@ namespace MetroidVF
 
             if (other is ExitGame)
             {
+                ExitGame x = (ExitGame)other;
+                Game1.entities.Remove(x);
                 EnterPlayerState(PlayerState.Imune);
+
             }
         }
 
