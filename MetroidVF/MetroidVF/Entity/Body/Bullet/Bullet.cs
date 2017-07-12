@@ -56,12 +56,30 @@ namespace MetroidVF
                 Enemy2 c = (Enemy2)other;
                 c.SetHealth(damage);
                 Game1.entities.Remove(this);
+                if (c.GetHealth() <= 0)
+                {
+                    Game1.entities.Remove(other);
+                }
+            }
+
+            if (other is Enemy1)
+            {
+                Enemy1 c = (Enemy1)other;
+                c.SetHealth(damage);
+                Game1.entities.Remove(this);
+                if (c.GetHealth() <= 0)
+                {
+                    Game1.entities.Remove(other);
+
+                }
+                
             }
 
             if (other is Door)
             {
                 Door d = (Door)other;
-                d.SetHealth(damage);               
+                d.SetHealth(damage);
+                Game1.entities.Remove(this);
             }
 
             if (other is Map)

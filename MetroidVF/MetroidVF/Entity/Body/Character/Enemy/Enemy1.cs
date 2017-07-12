@@ -17,6 +17,7 @@ namespace MetroidVF
         int animTotalFrames;
         Texture2D teste;
         Vector2 moveDir;
+        public float health = 100f;
 
         enum EnemyState { Right, Up, Down, Left, Stop }
         EnemyState currentEnState = EnemyState.Stop;
@@ -386,6 +387,16 @@ namespace MetroidVF
                 return false;
         }
 
-        
+        public void SetHealth(float f)
+        {
+            health += f;
+        }
+
+        public float GetHealth()
+        {
+            return health;
+        }
+
+
     }
 }

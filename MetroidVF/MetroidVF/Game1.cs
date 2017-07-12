@@ -20,10 +20,10 @@ namespace MetroidVF
         public static bool BulletUP;
         public static Human hum;
 
-        enum GameState { Null, MainMenu, Playing };
-        GameState currGameState = GameState.MainMenu;
+        public enum GameState { Null, MainMenu, Playing };
+        public static GameState currGameState = GameState.MainMenu;
 
-        void EnterGameState(GameState newState)
+        public void EnterGameState(GameState newState)
         {
             LeaveGameState();
 
@@ -41,7 +41,7 @@ namespace MetroidVF
             }
         }
 
-        void LeaveGameState()
+        public void LeaveGameState()
         {
             switch (currGameState)
             {
@@ -55,7 +55,7 @@ namespace MetroidVF
             }
         }
 
-        void UpdateGameState(GameTime gameTime)
+        public void UpdateGameState(GameTime gameTime)
         {
             switch (currGameState)
             {
@@ -78,7 +78,7 @@ namespace MetroidVF
             }
         }
 
-        void DrawGameState(GameTime gameTime)
+        public void DrawGameState(GameTime gameTime)
         {
             switch (currGameState)
             {
@@ -140,21 +140,7 @@ namespace MetroidVF
             hum = new Human(new Vector2(1032, 305));
             entities.Add(hum);
 
-            //Doors
-            entities.Add(new Door(new Vector2(2395, 207)));
-            entities.Add(new Door(new Vector2(2931, 207)));
-
-            //PowerUP
-            entities.Add(new PowerUp(new Vector2(465, 290)));
-
-            //Enemy2 POS OK!
-            entities.Add(new Enemy2(new Vector2(935, 80)));
-            entities.Add(new Enemy2(new Vector2(1132, 81)));
-            entities.Add(new Enemy2(new Vector2(2185, 120)));
-
-            //Enemy1 POS OK!
-            entities.Add(new Enemy1(new Vector2(1490, 65)));
-            entities.Add(new Enemy1(new Vector2(1646, 125)));
+            
 
             //UI
             uiTex = Content.Load<Texture2D>("Sprites/UI");
@@ -197,6 +183,26 @@ namespace MetroidVF
 
             
             base.Draw(gameTime);
+        }
+
+
+        public static void DrawInimigos()
+        {
+            //Doors
+            entities.Add(new Door(new Vector2(2395, 207)));
+            entities.Add(new Door(new Vector2(2931, 207)));
+
+            //PowerUP
+            entities.Add(new PowerUp(new Vector2(465, 290)));
+
+            //Enemy2 POS OK!
+            entities.Add(new Enemy2(new Vector2(935, 80)));
+            entities.Add(new Enemy2(new Vector2(1132, 81)));
+            entities.Add(new Enemy2(new Vector2(2185, 120)));
+
+            //Enemy1 POS OK!
+            entities.Add(new Enemy1(new Vector2(1490, 65)));
+            entities.Add(new Enemy1(new Vector2(1646, 125)));
         }
     }
 }

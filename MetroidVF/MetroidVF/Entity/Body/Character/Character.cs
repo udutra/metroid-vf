@@ -71,7 +71,7 @@ namespace MetroidVF
                 if (Game1.BulletUP == true)
                 {
                     shootDir = new Vector2(0, -1);
-                    Game1.BulletUP = false;
+                    
                 }
 
             }
@@ -93,9 +93,29 @@ namespace MetroidVF
                     }
                     if (shootDir.Y == -1)
                     {
-                        novoPos = new Vector2(position.X + 4f, position.Y - 16f);
+
+                        if (Game1.hum.currPlayerState == Human.PlayerState.LookingRight)
+                        {
+                            novoPos = new Vector2(position.X + 3f, position.Y - 6f);
+                        }
+                        else if(Game1.hum.currPlayerState == Human.PlayerState.LookingLeft)
+                        {
+                            novoPos = new Vector2(position.X + 3f, position.Y - 6f);
+                        }
+                        else if (Game1.hum.currPlayerState == Human.PlayerState.LookingUP)
+                        {
+                            if (Game1.hum.lookingRight == true)
+                            {
+                                novoPos = new Vector2(position.X + 3f, position.Y - 6f);
+                            }
+                            else
+                            {
+                                novoPos = new Vector2(position.X - 1f, position.Y - 6f);
+                            }
+                        }
+                        
                     }
-                    Game1.entities.Add(new Bullet(this, position, shootDir));
+                    Game1.entities.Add(new Bullet(this, novoPos, shootDir));
 
                 }
             }

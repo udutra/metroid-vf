@@ -20,11 +20,11 @@ namespace MetroidVF
         public bool lookingRight;
         public bool hasPowerUp = false;
         public bool isBall = false;
-        public static float health;
+        public float health;
 
 
-        enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
-        PlayerState currPlayerState = PlayerState.Null;
+        public enum PlayerState { Null, Start, Idle, walkingRight, walkingLeft, Jumping, jumpingRight, jumpingLeft, Falling, TurnBall, LookingUP, LookingRight, LookingLeft, Imune, RunRightShoot, RunLeftShoot };
+        public PlayerState currPlayerState = PlayerState.Null;
         PlayerState oldJumpState = PlayerState.Null;
 
 
@@ -159,6 +159,7 @@ namespace MetroidVF
 
                 case PlayerState.LookingUP:
                     {
+                        Game1.BulletUP = true;
                         if (lookingRight == true)
                         {
                             //Animation Idle
@@ -173,12 +174,14 @@ namespace MetroidVF
 
                 case PlayerState.LookingRight:
                     {
+                        Game1.BulletUP = true;
                         spriteSheet.PlayAnim(18, 20, 12f);
                     }
                     break;
 
                 case PlayerState.LookingLeft:
                     {
+                        Game1.BulletUP = true;
                         spriteSheet.PlayAnim(23, 25, 12f);
                     }
                     break;
@@ -209,7 +212,7 @@ namespace MetroidVF
             {
                 case PlayerState.Start:
                     {
-                        
+                        Game1.DrawInimigos();
                     }
                     break;
 
@@ -251,19 +254,19 @@ namespace MetroidVF
 
                 case PlayerState.LookingUP:
                     {
-
+                        Game1.BulletUP = false;
                     }
                     break;
 
                 case PlayerState.LookingRight:
                     {
-
+                        Game1.BulletUP = false;
                     }
                     break;
 
                 case PlayerState.LookingLeft:
                     {
-
+                        Game1.BulletUP = false;
                     }
                     break;
 
@@ -306,6 +309,7 @@ namespace MetroidVF
                             if (Keyboard.GetState().IsKeyDown(Keys.Right)) { EnterPlayerState(PlayerState.walkingRight); }
                             if (Keyboard.GetState().IsKeyDown(Keys.Left)) { EnterPlayerState(PlayerState.walkingLeft); }
                             if (KeyState.IsKeyDown(Keys.Up) && IsOnFirmGround()) { EnterPlayerState(PlayerState.Jumping); }
+                            
                         }
                     }
                     break;
@@ -883,15 +887,7 @@ namespace MetroidVF
 
         public override void CollisionDetected(Entity other)
         {
-            if (other is Enemy2)
-            {
-                this.SetHealth(-8);
-
-                if (this.GetHealth() <= 0)
-                {
-                    Game1.entities.Remove(this);
-                }               
-            }
+            
 
             if (other is PowerUp)
             {

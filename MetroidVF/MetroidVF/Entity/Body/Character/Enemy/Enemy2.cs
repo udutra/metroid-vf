@@ -16,7 +16,7 @@ namespace MetroidVF
         int animTotalFrames;
         Texture2D teste;
         Vector2 moveDir;
-        public static float health = 100f;
+        public float health = 100f;
 
         enum EnemyState { Right, Up, Down, Left, Stop }
         EnemyState currentEnState = EnemyState.Stop;
@@ -97,6 +97,11 @@ namespace MetroidVF
         public void SetHealth(float f)
         {
             health += f;
+        }
+
+        public float GetHealth()
+        {
+            return health;
         }
 
         void UpdateEnemyState(GameTime gameTime)
@@ -330,7 +335,16 @@ namespace MetroidVF
 
         public override void CollisionDetected(Entity other)
         {
-               
+            if (other is Human)
+            {
+                Game1.hum.SetHealth(-8);
+
+                if (Game1.hum.GetHealth() <= 0)
+                {
+                    Game1.entities.Remove(this);
+                    Game1.currGameState = Game1.GameState.MainMenu;
+                }
+            }
         }
 
         public override void Update(GameTime gameTime)
