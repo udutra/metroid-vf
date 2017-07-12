@@ -21,8 +21,9 @@ namespace MetroidVF
         public static bool bulletDir;
         public static bool BulletUP;
         public static Human hum;
-        public static Door d1, d2;
+        public static Door d1, d2, d3;
         public static PowerUp pu1;
+        public static ExitGame eg1;
         public static Enemy2 e21, e22, e23, e24, e25, e26, e27;
         public static Enemy1 e11, e12, e13, e14, e15;
         public static SoundEffectInstance playSound;
@@ -272,9 +273,9 @@ namespace MetroidVF
         {
             //Doors
             d1 = new Door(new Vector2(2430, 209));
-            d2 = new Door(new Vector2(2942, 209));
+            
             entities.Add(d1);
-            entities.Add(d2);
+            
 
 
             //PowerUP
@@ -298,6 +299,8 @@ namespace MetroidVF
         }
         public static void DrawInimigosSala2()
         {
+            d2 = new Door(new Vector2(2942, 209));
+            entities.Add(d2);
             //enemy2 sala 2
             e24 = new Enemy2(new Vector2(2686, 175));
             entities.Add(e24);
@@ -320,12 +323,17 @@ namespace MetroidVF
             entities.Add(e14);
             entities.Add(e15);
 
+            d3 = new Door(new Vector2(4966, 381));
+            entities.Add(d3);
+
+            eg1 = new ExitGame(new Vector2(5118, 381));
+            entities.Add(d3);
+
         }
 
         public static void LimpaSala1()
         {
             entities.Remove(d1);
-            entities.Remove(d2);
             entities.Remove(pu1);
             entities.Remove(e21);
             entities.Remove(e22);
@@ -338,6 +346,7 @@ namespace MetroidVF
         public static void LimpaSala2()
         {
             entities.Remove(e24);
+            entities.Remove(d2);
             iniciaMusica = false;
         }
 
@@ -349,6 +358,8 @@ namespace MetroidVF
             entities.Remove(e13);
             entities.Remove(e14);
             entities.Remove(e15);
+            entities.Remove(eg1);
+            entities.Remove(d3);
             iniciaMusica = false;
         }
 
