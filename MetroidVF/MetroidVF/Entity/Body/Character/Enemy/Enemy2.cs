@@ -231,21 +231,33 @@ namespace MetroidVF
                     {
                         moveDir = Vector2.Zero;
 
-                        if (IsOnLeft() && IsOnFirmGround())
-                        {
-                            rotation -= 1.57f;
-                            currentEnState = EnemyState.Right;
-                        }
-
-                        if (IsOnLeft())
+                        if (andandoPorta)
                         {
                             moveDir += Vector2.UnitY;
                         }
                         else
                         {
-                            rotation += 1.57f;
-                            currentEnState = EnemyState.Left;
+                            if (IsOnLeft() && IsOnFirmGround())
+                            {
+                                rotation -= 1.57f;
+                                currentEnState = EnemyState.Right;
+                            }
+
+                            if (IsOnLeft())
+                            {
+                                moveDir += Vector2.UnitY;
+                            }
+                            else
+                            {
+                                rotation += 1.57f;
+                                currentEnState = EnemyState.Left;
+                            }
                         }
+                        if (!ehPorta)
+                        {
+                            andandoPorta = false;
+                        }
+
                     }
                     break;
 
@@ -367,6 +379,21 @@ namespace MetroidVF
             return TestCollisionRect(min, max);
         }
 
+        public bool IsOnLeftDoor()
+        {
+            Vector2 max = new Vector2(position.X + size.X / 2f + 32, position.Y + size.Y / 2f + 4);
+            Vector2 min = new Vector2(position.X - size.X / 2f - 16, position.Y - size.Y / 2f);
+
+            // System.Console.WriteLine("RETORNO ESQUERDO: " + Game1.map.TestCollisionRect(min, max));
+            // System.Console.WriteLine("position.X: " + position.X);
+            // System.Console.WriteLine("position.Y: " + position.Y);
+            // System.Console.WriteLine("sposition.Y - size.Y / 2f - 4: " + (position.Y - size.Y / 2f));
+            // System.Console.WriteLine("size.Y / 2f + 4: " + (size.Y / 2f));
+
+            return TestCollisionRect(min, max);
+
+        }
+
         public bool IsOnLeft()
         {
             Vector2 max = new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f + 4);
@@ -439,6 +466,12 @@ namespace MetroidVF
                     andandoPorta = true;
                     rotation -= 1.57f;
                     currentEnState = EnemyState.Up;
+                }
+
+                if (IsOnLeftDoor())
+                {
+                    andandoPorta = true;
+                    currentEnState = EnemyState.Down;
                 }
             }
             else

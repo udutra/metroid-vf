@@ -263,7 +263,7 @@ namespace MetroidVF
         public static void DrawHumano()
         {
             //Samus
-            hum = new Human(new Vector2(1400, 305));
+            hum = new Human(new Vector2(2856, 220));
             entities.Add(hum);
             
         }
@@ -299,22 +299,22 @@ namespace MetroidVF
         public static void DrawInimigosSala2()
         {
             //enemy2 sala 2
-            e24 = new Enemy2(new Vector2(2686, 380));
+            e24 = new Enemy2(new Vector2(2686, 175));
             entities.Add(e24);
         }
 
         public static void DrawInimigosSala3()
         {
             //enemy2 sala 2
-            e25 = new Enemy2(new Vector2(3129, 400));
-            e26 = new Enemy2(new Vector2(3258, 400));
+            e25 = new Enemy2(new Vector2(3156, 400));
+            e26 = new Enemy2(new Vector2(3276, 400));
             e27 = new Enemy2(new Vector2(3898, 400));
             entities.Add(e25);
             entities.Add(e26);
             entities.Add(e27);
 
-            e13 = new Enemy1(new Vector2(3228,125));
-            e14 = new Enemy1(new Vector2(3195, 150));
+            e13 = new Enemy1(new Vector2(3215, 100));
+            e14 = new Enemy1(new Vector2(3250, 125));
             e15 = new Enemy1(new Vector2(3692, 125));
             entities.Add(e13);
             entities.Add(e14);
