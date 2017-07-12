@@ -846,8 +846,8 @@ namespace MetroidVF
 
             Vector2 min = new Vector2(position.X - size.X / 2f +14 , position.Y + size.Y / 2f - 4);
             Vector2 max = new Vector2(position.X + size.X / 2f -14, position.Y + size.Y / 2f + 4);
-            //System.Console.WriteLine("position.y: " + position.Y);
-            //System.Console.WriteLine("position.x: " + position.X);
+            System.Console.WriteLine("position.y: " + position.Y);
+            System.Console.WriteLine("position.x: " + position.X);
 
             return Game1.map.TestCollisionRect(min, max);
         }

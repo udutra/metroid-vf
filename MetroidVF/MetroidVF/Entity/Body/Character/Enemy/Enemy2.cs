@@ -442,7 +442,7 @@ namespace MetroidVF
             {
                 if (Game1.hum.imune == true)
                 {
-                    //System.Console.WriteLine("RETORNO: " + Game1.hum.imune);
+                    System.Console.WriteLine("RETORNO: " + Game1.hum.imune);
                     return;
                 }
 
