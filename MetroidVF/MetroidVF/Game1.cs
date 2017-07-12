@@ -23,8 +23,8 @@ namespace MetroidVF
         public static Human hum;
         public static Door d1, d2;
         public static PowerUp pu1;
-        public static Enemy2 e21, e22, e23;
-        public static Enemy1 e11, e12;
+        public static Enemy2 e21, e22, e23, e24, e25, e26, e27;
+        public static Enemy1 e11, e12, e13, e14, e15;
         public static SoundEffectInstance playSound;
         public SoundEffect sndMenu;
         public static bool iniciaMusica = false;
@@ -71,7 +71,9 @@ namespace MetroidVF
                 case GameState.Playing:
                     {
                         LimpaSala1();
-                        
+                        LimpaSala2();
+                        LimpaSala3();
+
                     }
                     break;               
             }
@@ -128,8 +130,12 @@ namespace MetroidVF
                         spriteBatch.Draw(texMainMenu, new Vector2(1, 1), Color.White);
                         
                         Game1.LimpaSala1();
+                        Game1.LimpaSala2();
+                        Game1.LimpaSala3();
                         Game1.DrawInimigosSala1();
-                        
+                        Game1.DrawInimigosSala2();
+                        Game1.DrawInimigosSala3();
+
                     }
                     break;
             }
@@ -219,7 +225,7 @@ namespace MetroidVF
         public static void DrawHumano()
         {
             //Samus
-            hum = new Human(new Vector2(2132, 305));
+            hum = new Human(new Vector2(3150, 305));
             entities.Add(hum);
             
         }
@@ -255,7 +261,27 @@ namespace MetroidVF
         public static void DrawInimigosSala2()
         {
             //enemy2 sala 2
-            entities.Add(new Enemy2(new Vector2(2706, 177)));
+            e24 = new Enemy2(new Vector2(2686, 380));
+            entities.Add(e24);
+        }
+
+        public static void DrawInimigosSala3()
+        {
+            //enemy2 sala 2
+            e25 = new Enemy2(new Vector2(3129, 400));
+            e26 = new Enemy2(new Vector2(3258, 400));
+            e27 = new Enemy2(new Vector2(3898, 400));
+            entities.Add(e25);
+            entities.Add(e26);
+            entities.Add(e27);
+
+            e13 = new Enemy1(new Vector2(3228,125));
+            e14 = new Enemy1(new Vector2(3195, 150));
+            e15 = new Enemy1(new Vector2(3692, 125));
+            entities.Add(e13);
+            entities.Add(e14);
+            entities.Add(e15);
+
         }
 
         public static void LimpaSala1()
@@ -271,6 +297,23 @@ namespace MetroidVF
             iniciaMusica = false;
         }
 
-        
+        public static void LimpaSala2()
+        {
+            entities.Remove(e24);
+            iniciaMusica = false;
+        }
+
+        public static void LimpaSala3()
+        {
+            entities.Remove(e25);
+            entities.Remove(e26);
+            entities.Remove(e27);
+            entities.Remove(e13);
+            entities.Remove(e14);
+            entities.Remove(e15);
+            iniciaMusica = false;
+        }
+
+
     }
 }
