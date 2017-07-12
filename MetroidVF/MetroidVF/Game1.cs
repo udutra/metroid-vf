@@ -306,7 +306,7 @@ namespace MetroidVF
             entities.Add(d2);
             //enemy2 sala 2
             e24 = new Enemy2(new Vector2(2686, 175));
-           // entities.Add(e24);
+            entities.Add(e24);
         }
 
         public static void DrawInimigosSala3()
@@ -365,6 +365,7 @@ namespace MetroidVF
             entities.Remove(e15);
             entities.Remove(eg1);
             entities.Remove(d3);
+            entities.Remove(e16);
             iniciaMusica = false;
         }
 

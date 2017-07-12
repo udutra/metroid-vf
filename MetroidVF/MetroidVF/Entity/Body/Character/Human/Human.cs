@@ -765,6 +765,7 @@ namespace MetroidVF
                         else
                         {
                             playSong.Stop();
+                            Game1.entities.Remove(this);
                             Game1.currGameState = Game1.GameState.Null;
                         }
                     }
