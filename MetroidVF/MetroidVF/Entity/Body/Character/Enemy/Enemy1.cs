@@ -8,19 +8,16 @@ namespace MetroidVF
 {
     public class Enemy1 : Character
     {
-        SpriteSheet spriteSheet;
+        SpriteSheet spriteSheet, explodeSheet;
         private static ContentManager content;
-        float animFrame = 0f;
-        float animSpeed = 0f;
-        int frameStart;
-        int frameEnd;
-        int animTotalFrames;
-        Texture2D teste;
+        Texture2D texEnemy, texExplode;
         Vector2 moveDir;
         public float health = 100f;
+        float timeCounter = 0;
+        public bool explosion = false;
 
-        enum EnemyState { Right, Up, Down, Left, Stop }
-        EnemyState currentEnState = EnemyState.Stop;
+        enum EnemyState { Null , Stop, Down, Idle, Explode }
+        EnemyState currentEnState;
 
         void EnterEnemyState(EnemyState newState)
         {
@@ -30,25 +27,7 @@ namespace MetroidVF
 
             switch (currentEnState)
             {
-                case EnemyState.Right:
-                    {
-
-                    }
-                    break;
-
-                case EnemyState.Left:
-                    {
-
-                    }
-                    break;
-
-                case EnemyState.Up:
-                    {
-
-                    }
-                    break;
-
-                case EnemyState.Down:
+                case EnemyState.Null:
                     {
 
                     }
@@ -56,6 +35,26 @@ namespace MetroidVF
 
                 case EnemyState.Stop:
                     {
+
+                    }
+                    break;
+
+                case EnemyState.Idle:
+                    {
+                        spriteSheet.PlayAnim(0, 1, 5.0f);
+                    }
+                    break;
+
+                case EnemyState.Down:
+                    {
+                        spriteSheet.PlayAnim(0, 1, 12f);
+                    }
+                    break;
+
+                case EnemyState.Explode:
+                    {
+                        explosion = true;
+                        //explodeSheet.PlayAnim(0, 2, 0.5f);
                     }
                     break;
             }
@@ -65,25 +64,7 @@ namespace MetroidVF
         {
             switch (currentEnState)
             {
-                case EnemyState.Right:
-                    {
-
-                    }
-                    break;
-
-                case EnemyState.Left:
-                    {
-
-                    }
-                    break;
-
-                case EnemyState.Up:
-                    {
-
-                    }
-                    break;
-
-                case EnemyState.Down:
+                case EnemyState.Null:
                     {
 
                     }
@@ -91,6 +72,25 @@ namespace MetroidVF
 
                 case EnemyState.Stop:
                     {
+
+                    }
+                    break;
+
+                case EnemyState.Idle:
+                    {
+                        
+                    }
+                    break;
+
+                case EnemyState.Down:
+                    {
+                        
+                    }
+                    break;
+
+                case EnemyState.Explode:
+                    {
+                        timeCounter = 0;
                     }
                     break;
             }
@@ -98,168 +98,84 @@ namespace MetroidVF
 
         void UpdateEnemyState(GameTime gameTime)
         {
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             switch (currentEnState)
             {
-                case EnemyState.Right:
+                case EnemyState.Null:
                     {
-                        /*moveDir = Vector2.Zero;
 
-                        if (IsOnFirmGround() && IsOnRight())
-                        {
-                            rotation -= 1.57f;
-                            currentEnState = EnemyState.Up;
-                        }
-
-                        if (IsOnFirmGround())
-                        {
-                            moveDir += Vector2.UnitX;
-                        }
-                        else
-                        {
-                            rotation += 1.57f;
-                            currentEnState = EnemyState.Down;
-                        }*/
-
-
-                    }
-                    break;
-
-                case EnemyState.Left:
-                    {
-                        /*moveDir = Vector2.Zero;
-
-                        if (IsOnRoof())
-                        {
-                            moveDir -= Vector2.UnitX;
-                        }
-                        else
-                        {
-                            rotation += 1.57f;
-                            currentEnState = EnemyState.Up;
-                        }*/
-                    }
-                    break;
-
-                case EnemyState.Up:
-                    {
-                        /*moveDir = Vector2.Zero;
-
-                        if (IsOnRight())
-                        {
-                            moveDir -= Vector2.UnitY;
-                        }
-                        else
-                        {
-                            rotation += 1.57f;
-                            currentEnState = EnemyState.Right;
-                        }*/
-                    }
-                    break;
-
-                case EnemyState.Down:
-                    {
-                        /*moveDir = Vector2.Zero;
-
-                        if (IsOnLeft() && IsOnFirmGround())
-                        {
-                            rotation -= 1.57f;
-                            currentEnState = EnemyState.Right;
-                        }
-
-                        if (IsOnLeft())
-                        {
-                            moveDir += Vector2.UnitY;
-                        }
-                        else
-                        {
-                            rotation += 1.57f;
-                            currentEnState = EnemyState.Left;
-                        }*/
                     }
                     break;
 
                 case EnemyState.Stop:
                     {
-                        // moveDir = Vector2.Zero;
-                        // if (Keyboard.GetState().IsKeyDown(Keys.Right)) { moveDir += Vector2.UnitX; }
-                        // if (Keyboard.GetState().IsKeyDown(Keys.Left)) { moveDir -= Vector2.UnitX; }
-                        // if (Keyboard.GetState().IsKeyDown(Keys.Down)) { moveDir += Vector2.UnitY; }
-                        // if (Keyboard.GetState().IsKeyDown(Keys.Up)) { moveDir -= Vector2.UnitY; }
-
-
-                        if (ColisaoComHumano())
+                        moveDir = Vector2.Zero;
+                        if (timeCounter <= 2f)
                         {
-                            //Console.WriteLine("COLISÃO COM O HUMANO");
-                            if (!IsOnFirmGround())
-                            {
-                                moveDir = Vector2.Zero;
-
-                                speed = 180;
-
-                                Human nearestBody = null;
-                                float nearestDist = 9999.9f;
-
-                                Human testBody = Game1.hum;
-
-                                float testDist = Vector2.Distance(this.position, testBody.position) - (float) testBody.GetDiagonal() *100;
-
-                                if ((testDist <= GetDiagonal() *100) && (testDist < nearestDist))
-                                {
-                                    nearestDist = testDist;
-                                    nearestBody = testBody;
-                                }
-
-                                if (nearestBody != null)
-                                {
-                                    moveDir += nearestBody.position - position;
-                                }
-                            }
-                            else
-                            {
-                                //Verificar se colidiu com humano
-                                //Se não explode
-                            }
+                            timeCounter += dt;
                         }
+                        else
                         {
-                            // currentEnState = EnemyState.Right;
+                            EnterEnemyState(EnemyState.Explode);
                         }
+                    }
+                    break;
+
+                case EnemyState.Idle:
+                    {
+                        if (HumanColission())
+                        {    
+                            EnterEnemyState(EnemyState.Down);
+                        }
+                    }
+                    break;
+
+                case EnemyState.Down:
+                    {
+                        moveDir = Vector2.Zero;
+                        speed = 300;
+                       
+                        Human nearestBody = null;
+                        float nearestDist = 9999.9f;
+
+                        Human testBody = Game1.hum;
+
+                        float testDist = Vector2.Distance(this.position, testBody.position) - (float)testBody.GetDiagonal() * 100;
+
+                        if ((testDist <= GetDiagonal() * 100) && (testDist < nearestDist))
+                        {
+                            nearestDist = testDist;
+                            nearestBody = testBody;
+                        }
+
+                        if (nearestBody != null)
+                        {
+                            moveDir += nearestBody.position - position;
+                        }
+
+                        if (IsOnFirmGround())
+                        {
+                            EnterEnemyState(EnemyState.Stop);
+                        }
+                    }
+                    break;
+
+                case EnemyState.Explode:
+                    {
                     }
                     break;
             }
         }
 
-        public void PlayAnim(int frameStart, int frameEnd, float animSpeed)
-        {
-            animFrame = (float)frameStart;
-            this.frameStart = frameStart;
-            this.frameEnd = frameEnd;
-            this.animSpeed = animSpeed;
-
-            animTotalFrames = frameEnd - frameStart + 1;
-        }
-
-        public void UpdateAnim(float dt)
-        {
-            animFrame -= frameStart;
-
-            animFrame += dt * animSpeed;
-
-            animFrame = animFrame % animTotalFrames;
-            if (animFrame < 0f)
-                animFrame += animTotalFrames;
-
-            animFrame += frameStart;
-        }
-
         public Enemy1(Vector2 initPos) : base(initPos)
         {
             speed /= 2f;
-            teste = Content.Load<Texture2D>("SpriteSheets/enemy1Sheet");
-            spriteSheet = new SpriteSheet(teste, 2, 1);
+            texEnemy = Content.Load<Texture2D>("SpriteSheets/enemy1Sheet");
+            texExplode = Content.Load<Texture2D>("SpriteSheets/enemy1Explode");
+            spriteSheet = new SpriteSheet(texEnemy, 2, 1);
+            explodeSheet = new SpriteSheet(texExplode, 3, 1);
 
-            PlayAnim(0, 1, 5.0f);
-
-
+            EnterEnemyState(EnemyState.Idle);
         }
 
         public override Vector2 GetDir()
@@ -275,17 +191,38 @@ namespace MetroidVF
 
         public override Texture2D GetSprite()
         {
-            return spriteSheet.tex;
+            if (explosion == true)
+            {
+                return explodeSheet.tex;
+            }
+            else
+            {
+                return spriteSheet.tex;
+            }
         }
 
         public override Vector2 GetSize()
         {
-            return new Vector2(32, 64);
+            if (explosion == true)
+            {
+                return new Vector2(220, 128);
+            }
+            else
+            {
+                return new Vector2(32, 64); 
+            }
         }
 
         public override Rectangle? GetSourceRectangle()
         {
-            return spriteSheet.GetSourceRectangle((int)animFrame);
+            if (explosion == true)
+            {
+                return explodeSheet.GetSourceRectangle((int)spriteSheet.animFrame);
+            }
+            else
+            {
+                return spriteSheet.GetSourceRectangle((int)spriteSheet.animFrame);
+            }
         }
 
         public bool IsOnFirmGround()
@@ -349,10 +286,20 @@ namespace MetroidVF
             return false;
         }
 
+        private void AffectWithGravity()
+        {
+            //Gravity
+            moveDir += Vector2.UnitX * 1f;
+            moveDir -= Vector2.UnitX * 1f;
+          //  moveDir += Vector2.UnitY * 1f;
+        }
+
         public override void Update(GameTime gameTime)
         {
-            UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
+            spriteSheet.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
+            explodeSheet.UpdateAnim((float)gameTime.ElapsedGameTime.TotalSeconds);
             UpdateEnemyState(gameTime);
+            AffectWithGravity();
             base.Update(gameTime);
         }
 
@@ -365,7 +312,7 @@ namespace MetroidVF
             return position + size / 2;
         }
 
-        public bool ColisaoComHumano()
+        public bool HumanColission()
         {
             Vector2 min = Game1.hum.GetMin();
             Vector2 max = Game1.hum.GetMax();

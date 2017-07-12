@@ -593,6 +593,10 @@ namespace MetroidVF
                         {
                             EnterPlayerState(PlayerState.LookingRight);
                         }
+                        if (KeyState.IsKeyDown(Keys.Left) && KeyState.IsKeyDown(Keys.Up))
+                        {
+                            EnterPlayerState(PlayerState.LookingLeft);
+                        }
 
                         if (KeyState.IsKeyUp(Keys.Up))
                         {
@@ -742,6 +746,7 @@ namespace MetroidVF
             EnterPlayerState(PlayerState.Start);
             health = 30;
             Game1.bulletDir = true;
+            speed = 230;
         }
                 
         public override Vector2 GetDir() { return moveDir; }
